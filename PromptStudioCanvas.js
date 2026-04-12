@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback, useReducer, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import {
     Camera, Copy, X, ChevronUp, ChevronDown, Check, Sparkles,
     Moon, Sun, MonitorPlay, Palette,
     Loader2, Volume2, Box, Layers, Activity, Film,
     MoveHorizontal, Cpu, User, TreePine, Image as LucideImage,
-    Info, List, Maximize,
+    Info, List, Maximize, Video,
     FileCode, Play, Lightbulb, GripVertical,
     Wand2, AlertTriangle, AlertCircle, RefreshCw, Gauge, Edit2,
     Aperture, TerminalSquare, Plus, ImageIcon, LayoutPanelLeft, Megaphone, Save,
@@ -18,7 +19,9 @@ import {
  * =============================================================================
  */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwNjk0nkv_X6ASnwrxmc2Plj24bjMcd6pegp11dKCxzWgfK3AixfvfAALn89uh2xbSO/exec";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const A = {
     SET_STATE: 'SET_STATE',
@@ -35,20 +38,11 @@ const A = {
     CLEAR_ERROR: 'CLEAR_ERROR',
     INITIALIZE: 'INITIALIZE',
     ADD_NOTIFICATION: 'ADD_NOTIFICATION',
-    REMOVE_NOTIFICATION: 'REMOVE_NOTIFICATION'
+    REMOVE_NOTIFICATION: 'REMOVE_NOTIFICATION',
+    TOGGLE_LANGUAGE: 'TOGGLE_LANGUAGE',
+    SET_PRESETS: 'SET_PRESETS',
+    SET_HISTORY: 'SET_HISTORY'
 };
-
-const IDEAL_ORDER = [
-    'purpose', 'awareness_level', 'marketing_angle', 'concept_area',
-    'role', 'context', 'task', 'target_model',
-    'environment', 'light_setup',
-    'camera', 'lens', 'aperture', 'shutter_iso',
-    'shot_type', 'camera_angle', 'perspective',
-    'art_render', 'film_emulation', 'color_science', 'material',
-    'camera_motion', 'video_sfx',
-    'aspect_ratio', 'weather_condition', 'composition_rule', 'subject_details', 'technical_params', 'negative_prompt',
-    'brand_voice', 'target_persona', 'emotional_trigger', 'visual_hook'
-];
 
 const iconMap = {
     Camera, Sun, Palette, MonitorPlay, Sparkles,
@@ -81,33 +75,70 @@ const DATA_CONFIG = {
     ]
 };
 
-/**
- * =============================================================================
- * CENTRALIZED UI STYLES
- * =============================================================================
- */
+// =============================================================================
+// CENTRALIZED UI STYLES - MODERN AI / APPLE CONCEPT
+// =============================================================================
 const UI_STYLES = {
+    // --- BUTONLAR ---
+    button: {
+        base: "inline-flex items-center justify-center gap-2 font-semibold tracking-wide rounded-full transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100",
+        sm: "px-4 py-2 text-[11px]",
+        md: "px-6 py-2.5 text-[13px]",
+        lg: "px-8 py-3 text-[14px]",
+        
+        // Standart Eylem Butonu (Kaydet, Ekle vs.)
+        primary: "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 shadow-sm hover:shadow-md",
+        
+        // İkincil / İptal Butonları
+        outline: "border-2 border-slate-200 text-slate-700 bg-transparent hover:border-slate-300 hover:bg-slate-50 dark:border-neutral-700 dark:text-slate-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-800",
+        
+        // Ghost / Gizli Butonlar
+        ghost: "bg-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-neutral-800",
+        
+        // Yapay Zeka Özel Butonu (İlham Ver, AI Optimize vs.)
+        ai: "relative overflow-hidden bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 border border-white/20 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0 before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700",
+        
+        // Tehlike / Silme
+        danger: "bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50"
+    },
+
+    // --- FORM ELEMANLARI ---
+    input: {
+        base: "w-full bg-transparent outline-none transition-all duration-300 font-medium",
+        underline: "border-b-2 pb-2 text-[15px] border-slate-200 focus:border-indigo-500 dark:border-neutral-700 dark:focus:border-indigo-400 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
+        solid: "px-4 py-3 rounded-2xl bg-slate-100/50 focus:bg-white border-2 border-transparent focus:border-indigo-500/30 text-[14px] text-slate-900 dark:bg-neutral-800/50 dark:focus:bg-neutral-800 dark:focus:border-indigo-400/30 dark:text-white",
+    },
+
+    // --- KARTLAR & SEÇİM ---
+    card: {
+        base: "w-full flex flex-col rounded-3xl border text-left transition-all duration-300 relative group cursor-pointer overflow-hidden backdrop-blur-md",
+        
+        // Hover tabanlı spot aydınlatma mantığı için zeminler (animasyonlar CSS ile çözülecek)
+        active: "bg-gradient-to-br from-indigo-50/50 to-purple-50/30 dark:from-indigo-900/20 dark:to-purple-900/10 border-indigo-400 shadow-md shadow-indigo-500/10 ring-2 ring-indigo-500/20 scale-[1.01] z-10",
+        inactive: "bg-white/60 dark:bg-neutral-900/60 border-slate-200/60 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 hover:bg-white/90 dark:hover:bg-neutral-800/80 shadow-sm hover:shadow-md"
+    },
+
+    // --- SWITCH / TOGGLE ---
     toggle: {
-        base: "w-9 h-5 rounded-full relative transition-all duration-300 flex-shrink-0 outline-none border-2 shadow-sm",
-        active: "bg-indigo-600 border-indigo-600",
-        inactive: "bg-slate-300 dark:bg-slate-600 border-slate-400 dark:border-slate-500",
-        thumbBase: "absolute top-0.5 w-3 h-3 bg-white rounded-full shadow-md transition-all duration-300",
-        thumbActive: "left-5",
-        thumbInactive: "left-0.5"
+        base: "w-11 h-6 rounded-full relative transition-colors duration-300 focus:outline-none flex-shrink-0 cursor-pointer",
+        active: "bg-indigo-500",
+        inactive: "bg-slate-300 dark:bg-neutral-700",
+        thumbBase: "absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-sm",
+        thumbActive: "translate-x-5",
+        thumbInactive: "translate-x-0"
     },
-    categoryCard: {
-        base: "w-full flex flex-col rounded-3xl border text-left transition-all relative group cursor-pointer overflow-hidden",
-        active: "bg-indigo-50 border-indigo-400 dark:bg-indigo-500/10 shadow-md ring-2 ring-indigo-500/20 scale-[1.01]",
-        inactive: "bg-white/60 dark:bg-neutral-800/50 border-slate-200 dark:border-white/10 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-500/50"
-    },
+
+    // --- SKELETON LOADING ---
+    skeleton: "animate-pulse bg-slate-200 dark:bg-neutral-800 rounded-lg",
+
+    // --- SWITCHER ---
     switcher: {
-        container: "flex rounded-full p-1 border",
-        containerDark: "bg-white/5 border-white/5",
-        containerLightMd: "bg-slate-100 border-transparent shadow-inner",
-        containerLightSm: "bg-slate-200/50 border-transparent shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]",
-        btnBase: "rounded-full transition-all flex items-center justify-center font-black",
-        btnActive: "bg-white dark:bg-slate-700/80 text-indigo-600 dark:text-indigo-300 shadow-sm",
-        btnInactive: "bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+        container: "flex items-center p-1 rounded-xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]",
+        containerDark: "bg-neutral-900/80 border border-white/10",
+        containerLightMd: "bg-slate-100/80 border border-slate-200/60",
+        btnBase: "rounded-lg font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 ring-indigo-500",
+        btnActive: "bg-white dark:bg-neutral-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200 dark:border-white/10",
+        btnInactive: "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transparent border border-transparent"
     }
 };
 
@@ -122,45 +153,60 @@ const transformApiData = (categoriesTable, itemsTable) => {
     const toBool = (val) => val === true || val === 1 || String(val).toLowerCase() === "true" || String(val) === "1";
 
     const getOrder = (val1, val2) => {
-        if (val1 !== undefined && val1 !== null && String(val1).trim() !== '') return Number(val1);
-        if (val2 !== undefined && val2 !== null && String(val2).trim() !== '') return Number(val2);
+        const n1 = parseFloat(val1);
+        const n2 = parseFloat(val2);
+        if (!isNaN(n1)) return n1;
+        if (!isNaN(n2)) return n2;
         return 999;
     };
 
     return categoriesTable.map(cat => {
-        const catIdLower = String(cat.Category_id || '').toLowerCase();
+        const catIdLower = String(cat.category_id || cat.Category_id || '').toLowerCase();
 
-        let rawItems = Array.isArray(cat.Items) ? cat.Items : [];
+        let rawItems = [];
+        if (Array.isArray(cat.Items)) {
+            rawItems = cat.Items; // Legacy fall-back
+        } else if (Array.isArray(itemsTable)) {
+            rawItems = itemsTable.filter(i => String(i.category_id || i.Category_id || '').toLowerCase() === catIdLower);
+        }
 
         const catItems = rawItems.map(item => ({
-            id: String(item.Item_id || ''),
-            badge: String(item.Badge_tr || ''),
-            label: String(item.Label_tr || item.Label_en || ''),
-            trigger: String(item.Trigger_text || ''),
-            meaning: String(item.Tr_meaning || ''),
-            image: item.Image && item.Image !== '[URL]' ? String(item.Image) : null,
-            video: item.Video && item.Video !== '[URL]' ? String(item.Video) : null,
-            isDefault: toBool(item.Is_default),
-            sortPriority: getOrder(item.Prompt_Order_Index, item.Sort_priority)
+            id: String(item.item_id || item.Item_id || ''),
+            badge_tr: String(item.badge_tr || item.Badge_tr || ''),
+            badge_en: String(item.badge_en || ''),
+            label_tr: String(item.label_tr || item.Label_tr || item.Label_en || ''),
+            label_en: String(item.label_en || ''),
+            meaning_tr: String(item.meaning_tr || item.Tr_meaning || ''),
+            meaning_en: String(item.meaning_en || ''),
+            trigger: String(item.trigger_text || item.Trigger_text || ''),
+            image: item.image_url || item.Image && item.Image !== '[URL]' ? String(item.image_url || item.Image) : null,
+            video: item.video_url || item.Video && item.Video !== '[URL]' ? String(item.video_url || item.Video) : null,
+            isDefault: toBool(item.is_default !== undefined ? item.is_default : item.Is_default),
+            sortPriority: getOrder(item.sort_priority, item.Sort_priority)
         })).sort((a, b) => a.sortPriority - b.sortPriority);
 
-        let rawIcon = String(cat.Icon_name || 'Sparkles');
+        let rawIcon = String(cat.icon_name || cat.Icon_name || 'Sparkles');
         let safeIcon = rawIcon.replace(/-./g, x => x[1].toUpperCase());
         safeIcon = safeIcon.charAt(0).toUpperCase() + safeIcon.slice(1);
 
         return {
             id: catIdLower,
-            targetOutput: String(cat.Target_Output || 'Visual'),
-            groupName: String(cat.Group_Name_tr || ''),
-            title: String(cat.Title_tr || ''),
+            targetOutput: String(cat.target_output || cat.Target_Output || 'Visual'),
+            groupName_tr: String(cat.group_name_tr || cat.Group_Name_tr || ''),
+            groupName_en: String(cat.group_name_en || ''),
+            title_tr: String(cat.title_tr || cat.Title_tr || ''),
+            title_en: String(cat.title_en || ''),
+            description_tr: String(cat.description_tr || cat.Description_tr || ''),
+            description_en: String(cat.description_en || ''),
+            manualTip_tr: String(cat.manual_tip_tr || cat.Manual_tip_tr || ''),
+            manualTip_en: String(cat.manual_tip_en || ''),
+            example_tr: String(cat.example_tr || cat.Example_tr || ''),
+            example_en: String(cat.example_en || ''),
             iconName: safeIcon,
-            showFor: cat.Show_for ? String(cat.Show_for).split(',').map(s => s.trim().toLowerCase()) : ['image', 'video', 'img2vid'],
-            isMeta: toBool(cat.Is_meta),
-            defaultEnabled: cat.Default_enabled !== undefined ? toBool(cat.Default_enabled) : true,
-            orderIndex: getOrder(cat.Prompt_Order_Index, cat.Order_index),
-            description: String(cat.Description_tr || ''),
-            manualTip: String(cat.Manual_tip_tr || ''),
-            example: String(cat.Example_tr || ''),
+            showFor: (cat.show_for || cat.Show_for) ? String(cat.show_for || cat.Show_for).split(',').map(s => s.trim().toLowerCase()) : ['image', 'video', 'img2vid'],
+            isMeta: toBool(cat.is_meta || cat.Is_meta),
+            defaultEnabled: (cat.is_active !== undefined) ? toBool(cat.is_active) : ((cat.Default_enabled !== undefined) ? toBool(cat.Default_enabled) : true),
+            orderIndex: getOrder(cat.order_index, cat.Order_index),
             items: catItems
         };
     }).sort((a, b) => a.orderIndex - b.orderIndex);
@@ -265,6 +311,12 @@ function promptReducer(state, action) {
             return { ...state, notifications: [action.payload, ...(state.notifications || [])].slice(0, 5) };
         case A.REMOVE_NOTIFICATION:
             return { ...state, notifications: (state.notifications || []).filter(n => n.id !== action.payload) };
+        case A.TOGGLE_LANGUAGE:
+            return { ...state, language: state.language === 'tr' ? 'en' : 'tr' };
+        case A.SET_PRESETS:
+            return { ...state, presets: action.payload };
+        case A.SET_HISTORY:
+            return { ...state, history: action.payload };
         default:
             return state;
     }
@@ -487,22 +539,52 @@ const Modal = ({ open, onClose, title, subtitle, icon: Icon, maxW = 'max-w-2xl',
 
 const SectionWrapper = ({ title, colorTheme, isDark, outerClassName = '', containerClassName = '', customBg = '', innerRef, children }) => {
     const themes = {
-        indigo: { badge: 'bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800', border: 'border-t-indigo-500', bg: isDark ? 'bg-neutral-900/60 ring-white/10' : 'bg-indigo-50/10 ring-slate-900/5' },
-        emerald: { badge: 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', border: 'border-t-emerald-500', bg: isDark ? 'bg-neutral-900/60 ring-white/10' : 'bg-indigo-50/10 ring-slate-900/5' },
-        amber: { badge: 'bg-amber-50 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300 border-amber-200 dark:border-amber-800', border: 'border-t-amber-500', bg: isDark ? 'bg-neutral-900/60 ring-white/10' : 'bg-indigo-50/10 ring-slate-900/5' },
-        rose: { badge: 'bg-rose-50 dark:bg-rose-900/50 text-rose-600 dark:text-rose-300 border-rose-200 dark:border-rose-800', border: 'border-t-rose-500', bg: customBg }
+        indigo: {
+            badge: 'bg-indigo-100/80 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border-indigo-300/60 dark:border-indigo-700/50 shadow-indigo-500/10',
+            border: 'border-t-2 border-t-indigo-500/70',
+            bg: isDark ? 'bg-neutral-900/50 ring-indigo-500/10' : 'bg-white/60 ring-indigo-500/5',
+            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(99,102,241,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(99,102,241,0.1)]'
+        },
+        emerald: {
+            badge: 'bg-emerald-100/80 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border-emerald-300/60 dark:border-emerald-700/50 shadow-emerald-500/10',
+            border: 'border-t-2 border-t-emerald-500/70',
+            bg: isDark ? 'bg-neutral-900/50 ring-emerald-500/10' : 'bg-white/60 ring-emerald-500/5',
+            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(16,185,129,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(16,185,129,0.1)]'
+        },
+        amber: {
+            badge: 'bg-amber-100/80 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/50 shadow-amber-500/10',
+            border: 'border-t-2 border-t-amber-500/70',
+            bg: isDark ? 'bg-neutral-900/50 ring-amber-500/10' : 'bg-white/60 ring-amber-500/5',
+            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(245,158,11,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(245,158,11,0.1)]'
+        },
+        rose: {
+            badge: 'bg-rose-100/80 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 border-rose-300/60 dark:border-rose-700/50',
+            border: 'border-t-2 border-t-rose-500/70',
+            bg: customBg,
+            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(244,63,94,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(244,63,94,0.08)]'
+        }
     };
     const theme = themes[colorTheme] || themes.indigo;
     return (
         <div ref={innerRef} className={`relative flex-shrink-0 ${outerClassName}`}>
-            <span className={`absolute -top-3 left-6 z-20 px-3 py-0.5 text-[10px] font-bold tracking-widest rounded-full border shadow-sm ${theme.badge}`}>{String(title)}</span>
-            <div className={`backdrop-blur-xl ring-1 shadow-sm border-t-4 ${theme.border} ${theme.bg} ${containerClassName}`}>{children}</div>
+            <span className={`absolute -top-3 left-6 z-20 px-3 py-0.5 text-[10px] font-bold tracking-widest rounded-full border shadow-sm backdrop-blur-md ${theme.badge}`}>{String(title)}</span>
+            <div className={`backdrop-blur-xl ring-1 ${theme.border} ${theme.bg} ${theme.glow} ${containerClassName} bg-gradient-to-br from-white/80 to-white/40 dark:from-neutral-900/80 dark:to-neutral-900/40 border-white/20 dark:border-white/5`}>{children}</div>
         </div>
     );
 };
 
 const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, onEditManual }) => {
     const [imgError, setImgError] = useState(false);
+    const cardRef = useRef(null);
+
+    const handleMouseMove = (e) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        cardRef.current.style.setProperty('--mouse-x', `${x}px`);
+        cardRef.current.style.setProperty('--mouse-y', `${y}px`);
+    };
 
     const wordCount = React.useMemo(() => {
         if (!item.trigger) return 0;
@@ -512,7 +594,7 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
     const badgeNorm = String(item.badge || '').toLowerCase().trim();
     const labelNorm = String(item.label || '').toLowerCase().trim();
 
-    // Akıllı Badge Gizleme: Eğer badge boş değilse VE birbirlerini içeriyorlarsa gizle.
+    // Akıllı Badge Gizleme
     const showBadge = badgeNorm !== '' &&
         badgeNorm !== 'undefined' &&
         badgeNorm !== 'null' &&
@@ -521,43 +603,68 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
 
     return (
         <div
-            role="button" tabIndex={0} onClick={(e) => { e.stopPropagation(); onSelect(); }}
-            className={`${UI_STYLES.categoryCard.base} ${isSelected ? UI_STYLES.categoryCard.active : UI_STYLES.categoryCard.inactive}`}
+            ref={cardRef}
+            role="button" tabIndex={0} 
+            onClick={(e) => { e.stopPropagation(); onSelect(); }}
+            onMouseMove={handleMouseMove}
+            className={`${UI_STYLES.card.base} hover-glow-card ${isSelected ? UI_STYLES.card.active : UI_STYLES.card.inactive}`}
         >
+                
+                {/* Shimmer efekti — hover'da görünür */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
+                    <div className="absolute inset-0 shimmer-overlay rounded-3xl" />
+                </div>
+            {/* Seçiliyse subtle glow overlay */}
+            {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 pointer-events-none rounded-3xl" />}
+
             {(item.image || item.video) && !imgError && (
-                <div className="w-full h-28 bg-slate-200 dark:bg-slate-700 border-b border-slate-200/50 relative overflow-hidden flex items-center justify-center">
-                    {item.image 
-                        ? <img src={item.image} alt={String(item.label)} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" onError={() => setImgError(true)} /> 
+                <div className="w-full h-28 bg-slate-200 dark:bg-slate-800/60 border-b border-slate-200/50 dark:border-white/5 relative overflow-hidden flex items-center justify-center">
+                    {item.image
+                        ? <img src={item.image} alt="" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={() => setImgError(true)} />
                         : <div className="text-slate-400"><ImageIcon size={24} /></div>
                     }
                 </div>
             )}
-            <div className="p-5 flex flex-col h-full">
+            <div className="p-5 flex flex-col h-full relative z-10">
                 <div className="flex flex-col items-start w-full mb-3 pr-6">
                     {showBadge && (
-                        <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-400/30 mb-1.5">
+                        <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-200/80 dark:border-indigo-400/20 mb-1.5 backdrop-blur-sm">
                             {String(item.badge)}
                         </span>
                     )}
-                    <span className={`text-[15px] font-black leading-tight ${isSelected ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-700 dark:text-slate-300'}`}>{String(item.label)}</span>
+                    <span className={`text-[15px] font-black leading-tight tracking-tight ${
+                        isSelected ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-800 dark:text-slate-200'
+                    }`}>{String(item.label)}</span>
                 </div>
                 <div className="space-y-2.5 w-full pr-2 flex-1 flex flex-col">
-                    {item.meaning && <span className="text-[12px] italic font-medium block leading-relaxed text-slate-500">{String(item.meaning)}</span>}
+                    {item.meaning && <span className="text-[12px] italic font-medium block leading-relaxed text-slate-500 dark:text-slate-400">{String(item.meaning)}</span>}
                     {item.trigger && (
-                        <div className={`mt-auto p-2.5 rounded-xl border w-full transition-all ${isSelected ? 'bg-indigo-100/50 border-indigo-200 dark:bg-indigo-900/30 dark:border-indigo-500/30' : 'bg-slate-50 border-slate-200 dark:bg-white/5 dark:border-white/10'}`}>
-                            <div className="flex items-center justify-between mb-1 opacity-60">
-                                <span className="text-[8px] font-black uppercase tracking-widest">Trigger</span>
-                                <span className="text-[9px] font-bold">({wordCount} kelime)</span>
+                        <div className={`mt-auto p-2.5 rounded-xl border w-full transition-all ${
+                            isSelected
+                                ? 'bg-indigo-500/8 border-indigo-300/50 dark:bg-indigo-500/10 dark:border-indigo-500/20'
+                                : 'bg-slate-50/80 border-slate-200/60 dark:bg-white/3 dark:border-white/8 backdrop-blur-sm'
+                        }`}>
+                            <div className="flex items-center justify-between mb-1">
+                                <span className={`text-[8px] font-black uppercase tracking-widest ${
+                                    isSelected ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'
+                                }`}>Trigger</span>
+                                <span className={`text-[9px] font-bold ${
+                                    isSelected ? 'text-indigo-400' : 'text-slate-400'
+                                }`}>({wordCount} kelime)</span>
                             </div>
-                            <span className={`text-[11px] font-mono leading-relaxed block break-words ${isSelected ? 'text-indigo-800 dark:text-indigo-200 font-bold' : 'text-slate-600 dark:text-slate-400'}`}>
+                            <span className={`text-[11px] font-mono leading-relaxed block break-words ${
+                                isSelected ? 'text-indigo-800 dark:text-indigo-200 font-bold' : 'text-slate-600 dark:text-slate-400'
+                            }`}>
                                 {String(item.trigger)}
                             </span>
                         </div>
                     )}
                 </div>
             </div>
-            {isSelected && <div className="absolute top-5 right-5"><Check size={18} className="text-indigo-500" strokeWidth={3} /></div>}
-            {!isMultiSelect && <button onClick={(e) => { e.stopPropagation(); onEditManual(); }} className={`absolute bottom-4 right-4 p-2.5 rounded-xl shadow-sm border opacity-0 group-hover:opacity-100 transition-all ${isDark ? 'bg-neutral-800 border-white/10 text-white hover:text-indigo-400' : 'bg-white border-slate-200 text-slate-500 hover:text-indigo-600'}`}><Edit2 size={14} /></button>}
+            {isSelected && <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/40 z-20"><Check size={13} className="text-white" strokeWidth={3} /></div>}
+            {!isMultiSelect && <button onClick={(e) => { e.stopPropagation(); onEditManual(); }} className={`absolute bottom-4 right-4 z-20 p-2 rounded-xl shadow-md border opacity-0 group-hover:opacity-100 transition-all duration-200 ${
+                isDark ? 'bg-neutral-800/90 border-white/10 text-white hover:text-indigo-400 hover:border-indigo-500/30' : 'bg-white/90 border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200'
+            } backdrop-blur-md`}><Edit2 size={13} /></button>}
         </div>
     );
 };
@@ -603,9 +710,13 @@ const CategorySidebar = ({
 
             <div className="p-4 lg:p-6 overflow-y-auto custom-scrollbar flex-1">
                 {!isDataLoaded ? (
-                    <div className="flex flex-col items-center justify-center py-12 opacity-50">
-                        <Loader2 size={24} className="animate-spin text-indigo-500 mb-3" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Yükleniyor...</span>
+                    <div className="flex flex-col gap-3 py-4 animate-in fade-in">
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className={`flex items-center gap-3 p-3 rounded-2xl ${UI_STYLES.skeleton}`} style={{ opacity: Math.max(1 - (i * 0.15), 0.2) }}>
+                                <div className={`w-6 h-6 rounded-md ${isDark ? 'bg-white/5' : 'bg-black/5'}`}></div>
+                                <div className={`h-3 w-1/2 rounded-md ${isDark ? 'bg-white/5' : 'bg-black/5'}`}></div>
+                            </div>
+                        ))}
                     </div>
                 ) : !isReorderMode ? (
                     <div className="space-y-8 pb-4">
@@ -788,7 +899,9 @@ const usePromptManager = () => {
     const apiKey = ""; // Çevresel anahtar sistem tarafından sağlanır
 
     const [state, dispatch] = useReducer(promptReducer, {
-        isDataLoaded: false, product: '', description: '', isDark: false, isReorderMode: false, isReorderVertical: false, showInactiveInReorder: false, itemSortMode: 'group', isManualOpen: {}, autoCompile: true, activeFormat: 'image', activeCategoryTab: '', footerTab: 'raw', showDetailsList: false, customInput: "", isOptimizing: false, isEnhancingScene: false, isGeneratingTrigger: false, isAnalyzing: false, analysisResult: null, categoryOrder: [], selections: {}, activeCards: {}, manualInputs: {},
+        isDataLoaded: false, product: '', description: '', isDark: false, isReorderMode: false, isReorderVertical: false, showInactiveInReorder: false, itemSortMode: 'group', isManualOpen: {}, autoCompile: true, activeFormat: 'image', activeCategoryTab: '', footerTab: 'raw', showDetailsList: false, customInput: "",
+        language: 'tr', presets: [], history: [], showPresetsModal: false, showHistoryModal: false,
+        isOptimizing: false, isEnhancingScene: false, isGeneratingTrigger: false, isAnalyzing: false, analysisResult: null, categoryOrder: [], selections: {}, activeCards: {}, manualInputs: {},
         compiledResult: { visualRawEN: "", visualRawTR: "", visualRawArrayEN: [], visualBreakdown: [], textRawTR: "", textRawArrayTR: [], textBreakdown: [], aiEN: "", aiTR: "", noteShort: "", noteLong: "", conflicts_found: [] },
         error: null, debugPayload: null, showGaugeModal: false, showAnalyzeModal: false, showDebugModal: false, showAiNoteModal: false, showAdminModal: false,
         products: [], tableHeaders: null, appMode: 'visual', marketingHeaders: [], marketingData: [], productForm: {}, notifications: [], selectedProductId: '',
@@ -803,20 +916,23 @@ const usePromptManager = () => {
         if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
         syncTimeoutRef.current = setTimeout(async () => {
             try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    // CORS Preflight (OPTIONS) hatasını aşmak için application/json yerine text/plain kullanıyoruz
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action, table, payload })
-                });
-                const result = await response.json().catch(() => null);
-                if (result?.status === 'success') {
-                    const notifId = Date.now();
-                    dispatch({ type: A.ADD_NOTIFICATION, payload: { id: notifId, message: `✓ ${table} kaydedildi` } });
-                    setTimeout(() => dispatch({ type: A.REMOVE_NOTIFICATION, payload: notifId }), 10000);
+                // Supabase Sync - Action bazlı INSERT/UPDATE
+                if (action === "CREATE_RECORD") {
+                    const { error } = await supabase.from(table.toLowerCase()).insert(payload);
+                    if (error) throw error;
+                } else if (action === "update_row") {
+                    // Update mantığı (örnek: Is_Active güncelleme)
+                    const idKey = table.toLowerCase() === 'categories' ? 'category_id' : (table.toLowerCase() === 'products' ? 'product_id' : 'item_id');
+                    const { error } = await supabase.from(table.toLowerCase()).update(payload[0]).eq(idKey, payload[0][idKey]);
+                    if (error) throw error;
                 }
+
+                const notifId = Date.now();
+                dispatch({ type: A.ADD_NOTIFICATION, payload: { id: notifId, message: `✓ ${table} kaydedildi` } });
+                setTimeout(() => dispatch({ type: A.REMOVE_NOTIFICATION, payload: notifId }), 10000);
             } catch (err) {
-                console.error('Sync error:', err);
+                console.error('Supabase Sync error:', err);
+                dispatch({ type: A.SET_ERROR, message: "Kayıt işlemi başarısız", context: err.message });
             }
         }, 1500);
     }, []);
@@ -847,36 +963,35 @@ const usePromptManager = () => {
     useEffect(() => {
         const fetchApiData = async () => {
             try {
-                const response = await fetch(API_URL);
-                if (!response.ok) throw new Error("API erişim hatası.");
-                const rawData = await response.json().catch(() => null);
-                if (!rawData) throw new Error("JSON parse hatası");
+                // Supabase JS client sorguları hata atmaz, { data, error } döner. O yüzden the promise.catch kullanılamaz.
+                const prodsPromise = supabase.from('products').select('*').order('Create_Time', { ascending: false }).then(res => res).catch(() => ({ data: [], error: null }));
+                
+                const [catsRes, itemsRes, prodsRes] = await Promise.all([
+                    supabase.from('categories').select('*').order('order_index'),
+                    supabase.from('items').select('*').order('sort_priority'),
+                    prodsPromise
+                ]);
 
-                const catsData = rawData.categories?.data || [];
-                const itemsData = rawData.items?.data || [];
-                const prodsData = rawData.products?.data || [];
+                if (catsRes.error) throw catsRes.error;
+                if (itemsRes.error) throw itemsRes.error;
 
-                if (!Array.isArray(catsData) || catsData.length === 0) {
-                    dispatch({ type: A.SET_ERROR, message: "Kategoriler yüklenemedi" });
-                    return;
-                }
+                const catsData = catsRes.data || [];
+                const itemsData = itemsRes.data || [];
+                const prodsData = prodsRes.data || [];
 
+                // Eğer tablo tamamen boşsa hata fırlatma, çünkü Admin UI ile eklenecek
                 const headers = {
-                    categories: rawData.categories?.headers || [],
-                    items: rawData.items?.headers || [],
-                    products: rawData.products?.headers || [],
-                    marketing: rawData.marketing?.headers || []
+                    categories: (catsData[0] && Object.keys(catsData[0]).length > 0) ? Object.keys(catsData[0]) : ['category_id', 'group_name_tr', 'group_name_en', 'title_tr', 'title_en', 'icon_name', 'show_for', 'is_meta', 'is_active', 'order_index', 'manual_tip_tr', 'manual_tip_en'],
+                    items: (itemsData[0] && Object.keys(itemsData[0]).length > 0) ? Object.keys(itemsData[0]) : ['item_id', 'category_id', 'label_tr', 'label_en', 'trigger_text', 'meaning_tr', 'meaning_en', 'is_default', 'sort_priority'],
+                    products: (prodsData[0] && Object.keys(prodsData[0]).length > 0) ? Object.keys(prodsData[0]) : ['product_id', 'Product_Name_TR', 'Scene_Desc_TR'],
+                    marketing: []
                 };
 
                 const updatedCategories = transformApiData(catsData, itemsData);
-                const META_COLS = ['ID', 'Product_ID', 'Creator', 'Create_Time', 'Update_Time', 'Version', 'Format', 'Title'];
-                const mktHeaders = (headers.marketing || []).filter(h => !META_COLS.includes(h));
-                const mktData = rawData.marketing?.data || [];
-
                 const selections = {}; const activeCards = {}; const formats = ['image', 'video', 'img2vid'];
+                
                 formats.forEach(f => {
                     selections[f] = {}; activeCards[f] = {};
-
                     updatedCategories.forEach(cat => {
                         if (cat.id === 'negative_prompt') {
                             const defaultItems = cat.items.filter(i => i.isDefault).map(i => i.id);
@@ -887,18 +1002,9 @@ const usePromptManager = () => {
                         }
                         activeCards[f][cat.id] = cat.defaultEnabled;
                     });
-
-                    mktHeaders.forEach(h => {
-                        const hId = String(h).toLowerCase();
-                        selections[f][hId] = null;
-                        activeCards[f][hId] = true;
-                    });
                 });
 
                 setCategories(updatedCategories);
-
-                const configTable = rawData.find ? rawData.find(t => t.table === "Config" || t.table === "Settings")?.data || [] : [];
-                const getConf = (key) => configTable.find(c => c.key === key)?.value || "";
 
                 dispatch({
                     type: A.INITIALIZE,
@@ -909,60 +1015,49 @@ const usePromptManager = () => {
                         activeCategoryTab: updatedCategories[0]?.id || '',
                         products: prodsData,
                         tableHeaders: headers,
-                        marketingHeaders: mktHeaders,
-                        marketingData: mktData,
-                        product: getConf('default_product') || 'Premium Saat',
-                        description: getConf('default_description_tr') || 'Koyu mermer yüzeyde ortalanmış, minimalist ürün çekimi.'
+                        marketingHeaders: [],
+                        marketingData: [],
+                        product: prodsData[0]?.Product_Name_TR || 'Premium Saat',
+                        description: prodsData[0]?.Scene_Desc_TR || 'Koyu mermer yüzeyde ortalanmış, minimalist ürün çekimi.'
                     }
                 });
             } catch (err) {
-                console.error("Data load failed:", err);
-                dispatch({ type: A.SET_ERROR, message: 'Veriler çekilemedi. API bağlantınızı kontrol edin.', context: String(err) });
+                console.error("Supabase load failed:", err);
+                dispatch({ type: A.SET_ERROR, message: 'Supabase bağlantı hatası!', context: err.message });
             }
         };
         fetchApiData();
     }, []);
 
+    const localizedCategories = useMemo(() => {
+        return categories.map(cat => ({
+            ...cat,
+            title: state.language === 'en' && cat.title_en ? cat.title_en : cat.title_tr,
+            groupName: state.language === 'en' && cat.groupName_en ? cat.groupName_en : cat.groupName_tr,
+            description: state.language === 'en' && cat.description_en ? cat.description_en : cat.description_tr,
+            manualTip: state.language === 'en' && cat.manualTip_en ? cat.manualTip_en : cat.manualTip_tr,
+            example: state.language === 'en' && cat.example_en ? cat.example_en : cat.example_tr,
+            items: cat.items.map(item => ({
+                ...item,
+                label: state.language === 'en' && item.label_en ? item.label_en : item.label_tr,
+                badge: state.language === 'en' && item.badge_en ? item.badge_en : item.badge_tr,
+                meaning: state.language === 'en' && item.meaning_en ? item.meaning_en : item.meaning_tr,
+            }))
+        }));
+    }, [categories, state.language]);
+
     const availableCategories = useMemo(() => {
-        if (state.appMode === 'marketing') {
-            if (!state.marketingHeaders || !Array.isArray(state.marketingHeaders)) return [];
-            return state.marketingHeaders.map(header => {
-                const hId = String(header).toLowerCase();
-                const uniqueItems = state.marketingData && Array.isArray(state.marketingData)
-                    ? [...new Set(state.marketingData.map(row => row[header]).filter(Boolean))]
-                    : [];
-
-                return {
-                    id: hId,
-                    title: String(header),
-                    groupName: 'Pazarlama',
-                    iconName: 'Target',
-                    showFor: ['image', 'video', 'img2vid'],
-                    isMeta: false,
-                    targetOutput: 'Text',
-                    // 3B: Pazarlama kategorileri için daha akıllı açıklamalar
-                    description: uniqueItems.length > 0
-                        ? `${String(header)} için ${uniqueItems.length} seçenek mevcut.`
-                        : `${String(header)} için henüz veri yok — manuel giriş yapabilirsiniz.`,
-                    manualTip: `${String(header)} değerini Türkçe yazın, AI İngilizceye çevirecek.`,
-                    items: uniqueItems.map((val, idx) => ({
-                        id: `mkt_${hId}_${idx}`,
-                        label: String(val),
-                        trigger: String(val),
-                        meaning: String(val),
-                        isDefault: idx === 0,
-                        sortPriority: idx
-                    }))
-                };
-            });
-        }
-
-        return categories.filter(cat => {
+        return localizedCategories.filter(cat => {
             if (!cat.showFor.includes(state.activeFormat)) return false;
-            const target = cat.targetOutput || 'Visual';
-            return target === 'Visual' || target === 'Both';
+            
+            const target = String(cat.targetOutput || 'Visual').toLowerCase();
+            if (state.appMode === 'marketing') {
+                return target === 'text' || target === 'both';
+            } else {
+                return target === 'visual' || target === 'both';
+            }
         });
-    }, [categories, state.activeFormat, state.appMode, state.marketingHeaders, state.marketingData]);
+    }, [localizedCategories, state.activeFormat, state.appMode]);
 
     useEffect(() => {
         if (state.isDataLoaded && availableCategories.length > 0 && !availableCategories.find(c => c.id === state.activeCategoryTab)) {
@@ -1410,7 +1505,7 @@ const App = () => {
 
         // Toplu Update_Row gönderimi
         if (state.appMode !== 'marketing') {
-            const payloadItems = newOrder.map((id, idx) => ({ Category_id: id, Prompt_Order_Index: idx, Order_index: idx }));
+            const payloadItems = newOrder.map((id, idx) => ({ category_id: id, order_index: idx }));
             syncToDatabase('update_row', 'Categories', payloadItems);
         }
     }, [availableCategories, state.appMode, state.categoryOrder, dispatch, syncToDatabase]);
@@ -1446,22 +1541,100 @@ const App = () => {
     return (
         <div className={`min-h-screen w-full flex flex-col relative bg-slate-50 overflow-y-auto ${state.isDark ? 'bg-neutral-950 text-white' : 'bg-slate-50 text-slate-900'} font-sans transition-colors duration-500`}>
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
-        body { font-family: 'Montserrat', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${state.isDark ? '#334155' : '#cbd5e1'}; border-radius: 10px; }
-        .mask-fade-right { mask-image: linear-gradient(to right, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&display=swap');
+        * { font-family: 'Inter', 'Montserrat', sans-serif; }
+
+        /* ---- AURORA ARKAPLAN ---- */
+        @keyframes aurora {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
         .bg-mesh {
-            background-color: ${state.isDark ? '#0a0a0a' : '#f8fafc'};
-            background-image: 
-                radial-gradient(at 0% 0%, ${state.isDark ? 'rgba(79, 70, 229, 0.15)' : 'rgba(79, 70, 229, 0.08)'} 0px, transparent 50%),
-                radial-gradient(at 100% 0%, ${state.isDark ? 'rgba(236, 72, 153, 0.15)' : 'rgba(236, 72, 153, 0.08)'} 0px, transparent 50%);
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-color: ${state.isDark ? '#080808' : '#fafafa'};
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 10%, ${state.isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)'} 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 0%,   ${state.isDark ? 'rgba(168,85,247,0.06)' : 'rgba(168,85,247,0.03)'} 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 50% 100%, ${state.isDark ? 'rgba(59,130,246,0.06)' : 'rgba(59,130,246,0.03)'} 0%, transparent 60%);
+            background-size: 200% 200%;
+            animation: aurora 25s ease infinite;
+        }
+
+        /* ---- SKELETON SHIMMER EFECTİ ---- */
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        /* ---- HOVER GLOW EFFECT (Fare İzleme) ---- */
+        .hover-glow-card {
+            position: relative;
+        }
+        .hover-glow-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(99, 102, 241, 0.08), transparent 40%);
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .hover-glow-card:hover::before {
+            opacity: 1;
+        }
+
+        /* ---- DOT GRID ---- */
+        .dot-grid {
+            background-image: radial-gradient(${state.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(99,102,241,0.12)'} 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* ---- SHIMMER ---- */
+        @keyframes shimmer-move {
+          0% { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(250%) skewX(-15deg); }
+        }
+        .shimmer-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            animation: shimmer-move 2.5s ease-in-out infinite;
+            border-radius: inherit;
+        }
+
+        /* ---- SCROLLBAR ---- */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: ${state.isDark ? 'rgba(99,102,241,0.3)' : 'rgba(99,102,241,0.2)'};
+            border-radius: 99px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: ${state.isDark ? 'rgba(99,102,241,0.6)' : 'rgba(99,102,241,0.4)'};
+        }
+
+        /* ---- FADE MASK ---- */
+        .mask-fade-right { mask-image: linear-gradient(to right, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%); }
+
+        /* ---- GLASSMORPHISM PANEL ---- */
+        .glass-panel {
+            background: ${state.isDark ? 'rgba(15,15,25,0.6)' : 'rgba(255,255,255,0.65)'};
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+        }
+
+        /* ---- MOBILE ---- */
+        @media (max-width: 640px) {
+            .mobile-full { width: 100% !important; }
+            .mobile-px { padding-left: 1rem !important; padding-right: 1rem !important; }
         }
       `}</style>
-            <div className="fixed inset-0 pointer-events-none bg-mesh z-0"></div>
+            {/* Aurora animasyonlu arka plan + dot grid */}
+            <div className="fixed inset-0 pointer-events-none bg-mesh z-0" />
+            <div className="fixed inset-0 pointer-events-none dot-grid z-0 opacity-100" />
 
             {state.notifications && state.notifications.length > 0 && (
                 <div className="fixed top-4 right-4 z-[400] flex flex-col gap-2 pointer-events-none">
@@ -1502,9 +1675,10 @@ const App = () => {
                         <DynamicIcon name="Sparkles" size={24} className="text-indigo-500 drop-shadow-sm" />
                         <h1 className="text-[15px] font-semibold tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hidden md:block font-['Montserrat']">PROMPT STUDIO</h1>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <FormatSwitcher formats={DATA_CONFIG.FORMATS} activeFormat={state.activeFormat} onChange={(formatId) => dispatch({ type: A.SET_FORMAT, payload: formatId })} isDark={state.isDark} />
-                        <div className="w-px h-5 bg-slate-300 dark:bg-white/10 hidden md:block" />
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => dispatch({ type: A.TOGGLE_LANGUAGE })} className={`px-4 py-1.5 rounded-full text-[11px] font-black tracking-widest transition-all border ${state.isDark ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>{state.language === 'en' ? 'EN' : 'TR'}</button>
+                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showPresetsModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Kaydedilen Şablonlar"><Layers size={16} /></button>
+                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showHistoryModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Otomatik Geçmiş"><History size={16} /></button>
                         <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showAdminModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Veritabanı Yönetimi"><Settings size={16} /></button>
                         <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showDebugModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Dev Payload Viewer"><TerminalSquare size={16} /></button>
                         <button role="switch" aria-checked={state.isDark} onClick={() => dispatch({ type: A.SET_STATE, key: 'isDark', value: !state.isDark })} className={`p-2.5 rounded-full border transition-all shadow-sm ${state.isDark ? 'bg-white/5 border-white/10 hover:bg-white/10 text-slate-300' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'}`}>
@@ -1514,10 +1688,22 @@ const App = () => {
                 </div>
             </header>
 
-            <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:px-8 lg:py-8 flex flex-col gap-6 relative z-10 min-h-0">
+            {!state.isDataLoaded ? (
+                <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full h-full">
+                    <div className="relative flex items-center justify-center">
+                        <div className="absolute inset-0 rounded-full blur-2xl opacity-60 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 animate-pulse"></div>
+                        <div className={`relative flex items-center justify-center w-24 h-24 rounded-full shadow-2xl backdrop-blur-md ${state.isDark ? 'bg-black/40 border border-white/10' : 'bg-white/40 border border-white/40'}`}>
+                            <Loader2 size={36} className="text-indigo-500 animate-spin" />
+                        </div>
+                    </div>
+                    <h2 className="mt-8 text-xl font-bold tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Stüdyo Hazırlanıyor</h2>
+                    <p className={`mt-2 text-sm font-semibold tracking-wide animate-pulse ${state.isDark ? 'text-slate-400' : 'text-slate-500'}`}>Kategoriler ve AI Ayarları Yükleniyor...</p>
+                </div>
+            ) : (
+                <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:px-8 lg:py-8 flex flex-col gap-6 relative z-10 min-h-0">
 
-                {/* KURAL 2A: SectionWrapper "ÜRÜN VE SAHNE" içindeki dinamik form grid'e alındı */}
-                <SectionWrapper title="ÜRÜN VE SAHNE" colorTheme="indigo" isDark={state.isDark} containerClassName="flex flex-col gap-6 p-6 lg:p-8 rounded-[2.5rem]">
+                {/* ÜRÜN VE SAHNE — yardımcı / destekleyici hiyerarşi */}
+                <SectionWrapper title="ÜRÜN VE SAHNE" colorTheme="indigo" isDark={state.isDark} containerClassName={`flex flex-col gap-6 p-6 lg:p-8 rounded-[2rem] ${state.isDark ? 'opacity-90' : 'opacity-95'}`}>
                     {/* Sağ üst köşe butonları */}
                     <div className="flex items-center justify-between w-full mb-6">
                         <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">
@@ -1527,9 +1713,9 @@ const App = () => {
                             <button
                                 onClick={handleMagicIdea}
                                 disabled={state.isGeneratingMagic}
-                                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-600 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-500/20 dark:text-indigo-300 px-3 py-1.5 rounded-full transition-all active:scale-95"
+                                className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${UI_STYLES.button.ai}`}
                             >
-                                {state.isGeneratingMagic ? <Loader2 size={12} className="animate-spin" /> : '✨'} İlham Ver
+                                {state.isGeneratingMagic ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} İlham Ver
                             </button>
                             <button
                                 onClick={() => {
@@ -1541,9 +1727,9 @@ const App = () => {
                                         Scene_Desc_TR: state.description
                                     });
                                 }}
-                                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-full transition-all active:scale-95"
+                                className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${UI_STYLES.button.primary}`}
                             >
-                                <Save size={12} /> Kaydet
+                                <Save size={14} /> Kaydet
                             </button>
                         </div>
                     </div>
@@ -1590,18 +1776,16 @@ const App = () => {
                                                     dispatch({ type: A.SET_STATE, key: 'productForm', value: { ...state.productForm, [header]: e.target.value } });
                                                 }}
                                                 placeholder="Sahneyi betimleyin..."
-                                                className={`w-full bg-transparent outline-none resize-none text-sm font-semibold border-b-2 pb-2 pr-10 transition-all overflow-hidden
-                            ${isDirty ? 'border-orange-400' : 'border-slate-200 dark:border-white/10'}
-                            ${state.isDark ? 'text-white placeholder-slate-600' : 'text-slate-900 placeholder-slate-400'}`}
-                                                style={{ minHeight: '2rem' }}
+                                                className={`${UI_STYLES.input.base} ${UI_STYLES.input.underline} pr-12 resize-none overflow-hidden ${isDirty ? 'border-orange-400 dark:border-orange-500/50' : ''}`}
+                                                style={{ minHeight: '2.5rem' }}
                                             />
                                             <button
                                                 onClick={handleEnhanceScene}
                                                 disabled={state.isEnhancingScene || !state.description?.trim()}
-                                                className="absolute bottom-3 right-0 p-1.5 rounded-lg transition-all disabled:opacity-30 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/20"
+                                                className={`absolute bottom-3 right-0 ${UI_STYLES.button.base} p-1.5 rounded-lg opacity-80 hover:opacity-100 text-indigo-500 hover:bg-indigo-500/10`}
                                                 title="AI ile Geliştir"
                                             >
-                                                {state.isEnhancingScene ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
+                                                {state.isEnhancingScene ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
                                             </button>
                                         </div>
                                     ) : (
@@ -1613,9 +1797,7 @@ const App = () => {
                                                 if (header === 'Product_Name_TR') dispatch({ type: A.UPDATE_INPUT, field: 'product', value: v });
                                             }}
                                             placeholder={header === 'Product_Name_TR' ? 'Örn: Parıltılı Altın Saat' : `${String(header)}...`}
-                                            className={`w-full bg-transparent outline-none text-sm font-semibold border-b-2 pb-2 transition-all
-                          ${isDirty ? 'border-orange-400' : 'border-slate-200 dark:border-white/10'}
-                          ${state.isDark ? 'text-white placeholder-slate-600' : 'text-slate-900 placeholder-slate-400'}`}
+                                            className={`${UI_STYLES.input.base} ${UI_STYLES.input.underline} ${isDirty ? 'border-orange-400 dark:border-orange-500/50' : ''}`}
                                         />
                                     )}
                                 </div>
@@ -1624,7 +1806,9 @@ const App = () => {
                     </div>
                 </SectionWrapper>
 
-                <div className="w-full flex justify-center py-4 animate-in fade-in slide-in-from-bottom-2 relative z-30">
+                {/* MODE + FORMAT SEÇİCİ — birleşik blok */}
+                <div className="w-full flex flex-col items-center gap-3 py-2 animate-in fade-in slide-in-from-bottom-2 relative z-30">
+                    {/* Ana mod seçici */}
                     <div className={`flex p-2 rounded-[2.5rem] w-full max-w-4xl border shadow-xl transition-all ${state.isDark ? 'bg-black/40 border-white/10 backdrop-blur-md' : 'bg-white/80 border-slate-200 backdrop-blur-md'}`}>
                         <button
                             onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: 'visual' })}
@@ -1639,6 +1823,26 @@ const App = () => {
                             <Target size={18} /> <span className="hidden sm:inline">PAZARLAMA STRATEJİSİ</span><span className="sm:hidden">STRATEJİ</span>
                         </button>
                     </div>
+                    {/* Format seçici — sadece Görsel Üretimi modunda, animasyonlu */}
+                    {state.appMode === 'visual' && (
+                        <div className="flex items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mr-1">Format:</span>
+                            {DATA_CONFIG.FORMATS.map(f => (
+                                <button
+                                    key={f.id}
+                                    onClick={() => dispatch({ type: A.SET_FORMAT, payload: f.id })}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
+                                        state.activeFormat === f.id
+                                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/30'
+                                            : (state.isDark ? 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-200' : 'bg-white border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600')
+                                    }`}
+                                >
+                                    <DynamicIcon name={f.iconName} size={12} />
+                                    {f.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <SectionWrapper
@@ -1652,7 +1856,7 @@ const App = () => {
                         onToggleCard={(id) => {
                             const isActive = !state.activeCards[state.activeFormat]?.[id];
                             dispatch({ type: A.TOGGLE_CARD, categoryId: id });
-                            syncToDatabase('update_row', 'Categories', [{ Category_id: id, Is_Active: isActive }]);
+                            syncToDatabase('update_row', 'categories', [{ category_id: id, is_active: isActive }]);
                         }}
                         getCharCount={getCharCount}
                     />
@@ -1683,7 +1887,16 @@ const App = () => {
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-10 space-y-8 min-h-0 relative z-0">
                             {!state.isDataLoaded ? (
-                                <div className="flex flex-col items-center justify-center py-32 opacity-50"><Loader2 size={40} className="animate-spin text-indigo-500 mb-6" /><span className="text-sm font-black uppercase tracking-widest text-slate-400">Bekleniyor...</span></div>
+                                <div className="animate-in fade-in mb-8">
+                                    <div className={`h-4 w-32 mb-4 rounded-md ${UI_STYLES.skeleton} opacity-50`}></div>
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                                        {[...Array(4)].map((_, i) => (
+                                            <div key={i} className={`h-36 rounded-3xl ${UI_STYLES.skeleton} relative overflow-hidden`} style={{ opacity: Math.max(1 - (i * 0.2), 0.3) }}>
+                                                <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]`}></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             ) : availableCategories.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-32 opacity-50"><AlertCircle size={40} className="text-red-400 mb-6" /><span className="text-sm font-black uppercase tracking-widest text-slate-400">Bulunamadı</span></div>
                             ) : (
@@ -1778,7 +1991,12 @@ const App = () => {
                             <PromptHealthGauge length={currentActiveLength} onOpenModal={() => dispatch({ type: A.SET_STATE, key: 'showGaugeModal', value: true })} />
                             <div className="w-px h-5 bg-slate-200 dark:bg-white/10"></div>
                             <MasterAiButton onClick={handleAnalyzePrompt} disabled={state.isAnalyzing || currentActiveLength === 0} loading={state.isAnalyzing} icon={Activity} text="Analiz Et" className="px-3 py-1.5 text-[10px] rounded-full" />
-                            <MasterAiButton onClick={() => { const newOrder = []; IDEAL_ORDER.forEach(id => { if (availableCategories.find(c => c.id === id)) newOrder.push(id); }); availableCategories.forEach(c => { if (!newOrder.includes(c.id)) newOrder.push(c.id); }); dispatch({ type: A.SET_STATE, key: 'categoryOrder', value: newOrder }); }} icon={Wand2} text="AI Sırala" className="px-3 py-1.5 text-[10px] rounded-full" />
+                            <button onClick={() => {
+                                const resetOrder = availableCategories.sort((a,b) => a.orderIndex - b.orderIndex).map(c => c.id);
+                                dispatch({ type: A.SET_STATE, key: 'categoryOrder', value: resetOrder });
+                            }} className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 border border-slate-200 dark:border-white/10 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
+                                <RefreshCw size={12} /> Sıfırla
+                            </button>
                         </div>
                     </div>
                     <div className={`flex ${state.isReorderVertical ? 'flex-col gap-2' : 'items-center gap-1.5 overflow-x-auto custom-scrollbar pb-2 pt-1 mask-fade-right'}`}>
@@ -1860,6 +2078,7 @@ const App = () => {
                     </div>
                 </SectionWrapper>
             </main>
+            )}
 
             <AnalyzePromptModal open={state.showAnalyzeModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showAnalyzeModal', value: false })} isDark={state.isDark} isAnalyzing={state.isAnalyzing} analysisResult={state.analysisResult} />
             <AiNoteModal open={state.showAiNoteModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showAiNoteModal', value: false })} isDark={state.isDark} compiledResult={state.compiledResult} />
@@ -1867,6 +2086,8 @@ const App = () => {
             <DebugPayloadModal open={state.showDebugModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showDebugModal', value: false })} debugPayload={state.debugPayload} />
             <AdminModal open={state.showAdminModal && !!state.tableHeaders} onClose={() => dispatch({ type: A.SET_STATE, key: 'showAdminModal', value: false })} isDark={state.isDark} tableHeaders={state.tableHeaders} onSave={syncToDatabase} />
             <VariationsModal open={state.showVariationsModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showVariationsModal', value: false })} isDark={state.isDark} variations={state.variations} onCopy={(txt) => handleCopyGlobal(txt, () => showToast("Varyasyon panoya kopyalandı!"))} />
+            <PresetsModal open={state.showPresetsModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showPresetsModal', value: false })} isDark={state.isDark} presets={state.presets} onRestore={(snapshot) => dispatch({ type: A.INITIALIZE, payload: snapshot })} />
+            <HistoryModal open={state.showHistoryModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showHistoryModal', value: false })} isDark={state.isDark} history={state.history} onRestore={(snapshot) => dispatch({ type: A.INITIALIZE, payload: snapshot })} />
         </div>
     );
 };
@@ -1893,14 +2114,14 @@ const AdminModal = ({ open, onClose, isDark, tableHeaders, onSave }) => {
 
     if (!open) return null;
 
-    const META_COLS = ['Create_Time', 'Update_Time', 'Item_id', 'Category_id', 'Product_Id'];
+    const META_COLS = ['created_at', 'updated_at', 'item_id', 'category_id', 'product_id', 'history_id'];
     const currentHeaders = (tableHeaders?.[selectedTable] || []).filter(h => !META_COLS.includes(h));
 
     const generateId = (prefix) => `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
     const handleSave = async () => {
         setIsSaving(true);
-        const idMap = { items: 'Item_id', categories: 'Category_id', products: 'Product_Id' };
+        const idMap = { items: 'item_id', categories: 'category_id', products: 'product_id' };
         const autoIdKey = idMap[selectedTable];
         const finalData = autoIdKey
             ? { ...formData, [autoIdKey]: generateId(selectedTable) }
@@ -1975,6 +2196,111 @@ const VariationsModal = ({ open, onClose, isDark, variations, onCopy }) => {
                     </div>
                 ))}
             </div>
+        </Modal>
+    );
+};
+
+const PresetsModal = ({ open, onClose, isDark, presets, onRestore }) => {
+    if (!open) return null;
+    return (
+        <Modal open={open} onClose={onClose} title="Kaydedilen Şablonlar / Ürünler" icon={Layers} maxW="max-w-4xl" isDark={isDark}>
+            {presets && presets.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {presets.map((preset, idx) => (
+                        <div key={idx} className={`p-4 rounded-2xl border flex flex-col gap-3 ${isDark ? 'bg-neutral-800/50 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h4 className="text-sm font-bold">{String(preset.name)}</h4>
+                                    <p className="text-xs text-slate-500">{new Date(preset.created_at).toLocaleString()}</p>
+                                </div>
+                                <button onClick={() => { onRestore(preset.settings_snapshot); onClose(); }} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full text-[10px] font-bold uppercase">Geri Yükle</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-20 text-slate-500 text-sm font-semibold">Henüz kaydedilmiş bir şablon bulunmuyor.</div>
+            )}
+        </Modal>
+    );
+};
+
+const HistoryModal = ({ open, onClose, isDark, history, onRestore }) => {
+    if (!open) return null;
+    return (
+        <Modal open={open} onClose={onClose} title="Zaman Tüneli (Üretim Geçmişi)" subtitle="Sosyal Medya Akışı" icon={History} maxW="max-w-3xl" isDark={isDark}>
+            {history && history.length > 0 ? (
+                <div className="flex flex-col gap-8 pb-10">
+                    {history.map((log, idx) => {
+                        // Gelecekte eklenecek görsel/video mantığı için placeholder
+                        const hasMedia = log.ai_output_url && log.ai_output_url !== '';
+                        const snapshotObj = log.settings_snapshot || {};
+                        const parameterKeys = Object.keys(snapshotObj).slice(0, 5); // Özet parametre listesi
+
+                        return (
+                            <div key={idx} className={`rounded-3xl border shadow-lg overflow-hidden flex flex-col transition-transform hover:-translate-y-1 ${isDark ? 'bg-neutral-900/80 border-white/10' : 'bg-white border-slate-200'}`}>
+                                {/* Header */}
+                                <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-white/5">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-inner">
+                                            <Sparkles size={18} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-sm font-black tracking-wider uppercase">AI ÜRETİMİ</h4>
+                                            <p className="text-[10px] text-slate-400 font-mono mt-0.5">{new Date(log.created_at).toLocaleString('tr-TR', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => { onRestore(snapshotObj); onClose(); }} className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 dark:text-indigo-300 rounded-full text-[11px] font-black tracking-widest uppercase transition-all shadow-sm flex items-center gap-2">
+                                        <RefreshCw size={12} /> Stüdyoya Çek
+                                    </button>
+                                </div>
+
+                                {/* Media Placeholder (Gelecek Vizyonu) */}
+                                <div className="w-full aspect-[16/9] relative bg-slate-100 dark:bg-black/50 flex items-center justify-center border-b border-slate-100 dark:border-white/5 group overflow-hidden cursor-pointer" title="İleride Fal.ai entegrasyonu ile görseller/videolar doğrudan bu alana yüklenecek.">
+                                    {hasMedia ? (
+                                        <img src={log.ai_output_url} alt="AI Generation" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="flex flex-col items-center gap-3 opacity-40 group-hover:opacity-100 transition-opacity duration-500">
+                                            <div className="flex gap-4 text-slate-400 dark:text-slate-600">
+                                                <LucideImage size={40} className="animate-pulse" />
+                                                <Video size={40} className="animate-pulse delay-75" />
+                                            </div>
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 bg-white/50 dark:bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm">Görsel / Video Gelecek</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Content / Prompt */}
+                                <div className="p-6">
+                                    <p className={`text-sm font-mono leading-relaxed px-4 py-3 rounded-xl border-l-2 border-indigo-500 ${isDark ? 'bg-black/30 text-slate-300' : 'bg-slate-50 text-slate-700'}`}>
+                                        {String(log.generated_prompt)}
+                                    </p>
+
+                                    {/* Parameters / Badges */}
+                                    <div className="mt-5 flex flex-wrap gap-2">
+                                        {parameterKeys.map((k, i) => (
+                                            <span key={i} className={`px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded transition-colors ${isDark ? 'bg-white/5 text-slate-300 hover:bg-white/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                                {String(k)}: <span className="opacity-70 font-mono font-medium lowercase ml-1">{String(snapshotObj[k] || 'Yok')}</span>
+                                            </span>
+                                        ))}
+                                        {Object.keys(snapshotObj).length > 5 && (
+                                            <span className={`px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded ${isDark ? 'bg-white/5 text-slate-400' : 'bg-slate-100 text-slate-500'}`}>
+                                                +{Object.keys(snapshotObj).length - 5} Parametre
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center py-32 opacity-60">
+                    <History size={48} className="text-slate-300 mb-6" />
+                    <h3 className="text-lg font-black uppercase tracking-widest text-slate-400 mb-2">Akış Henüz Boş</h3>
+                    <p className="text-xs text-slate-500 font-semibold max-w-sm text-center leading-relaxed">Prompt stüdyosunda üretim yaptıkça, geçmişte oluşturduğun tüm sihirler bir sosyal medya akışı (Facebook, Instagram) tadında burada listelenecek.</p>
+                </div>
+            )}
         </Modal>
     );
 };
