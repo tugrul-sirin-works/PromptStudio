@@ -81,64 +81,62 @@ const DATA_CONFIG = {
 const UI_STYLES = {
     // --- BUTONLAR ---
     button: {
-        base: "inline-flex items-center justify-center gap-2 font-semibold tracking-wide rounded-full transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100",
-        sm: "px-4 py-2 text-[11px]",
-        md: "px-6 py-2.5 text-[13px]",
-        lg: "px-8 py-3 text-[14px]",
-        
-        // Standart Eylem Butonu (Kaydet, Ekle vs.)
-        primary: "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 shadow-sm hover:shadow-md",
-        
-        // İkincil / İptal Butonları
-        outline: "border-2 border-slate-200 text-slate-700 bg-transparent hover:border-slate-300 hover:bg-slate-50 dark:border-neutral-700 dark:text-slate-300 dark:hover:border-neutral-600 dark:hover:bg-neutral-800",
-        
-        // Ghost / Gizli Butonlar
-        ghost: "bg-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-neutral-800",
-        
-        // Yapay Zeka Özel Butonu (İlham Ver, AI Optimize vs.)
-        ai: "relative overflow-hidden bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 border border-white/20 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0 before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700",
-        
+        base: "inline-flex items-center justify-center gap-1.5 font-bold tracking-wide rounded-full transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60",
+        sm: "px-4 py-1.5 text-[11px]",
+        md: "px-5 py-2 text-[12px]",
+        lg: "px-7 py-2.5 text-[13px]",
+
+        // Ana aksiyon — violet
+        primary: "bg-violet-600 text-white hover:bg-violet-500 shadow-sm shadow-violet-500/20 hover:shadow-md hover:shadow-violet-500/25 border border-violet-500/30",
+
+        // İkincil / İptal
+        outline: "border border-slate-200/80 text-slate-600 bg-white/60 hover:bg-white hover:border-slate-300 dark:border-white/10 dark:text-slate-300 dark:bg-white/5 dark:hover:bg-white/10 dark:hover:border-white/20 backdrop-blur-sm",
+
+        // Nötr ghost
+        ghost: "bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/8",
+
+        // AI butonları — shimmer animasyonlu violet→cyan gradient
+        ai: "relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 text-white shadow-md shadow-violet-500/25 hover:shadow-lg hover:shadow-violet-500/35 border border-white/15 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/15 before:to-white/0 before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700",
+
         // Tehlike / Silme
-        danger: "bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-900/50"
+        danger: "bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 border border-rose-500/20 dark:text-rose-400 dark:hover:bg-rose-500/25"
     },
 
     // --- FORM ELEMANLARI ---
     input: {
-        base: "w-full bg-transparent outline-none transition-all duration-300 font-medium",
-        underline: "border-b-2 pb-2 text-[15px] border-slate-200 focus:border-indigo-500 dark:border-neutral-700 dark:focus:border-indigo-400 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500",
-        solid: "px-4 py-3 rounded-2xl bg-slate-100/50 focus:bg-white border-2 border-transparent focus:border-indigo-500/30 text-[14px] text-slate-900 dark:bg-neutral-800/50 dark:focus:bg-neutral-800 dark:focus:border-indigo-400/30 dark:text-white",
+        base: "w-full bg-transparent outline-none transition-all duration-200 font-medium",
+        underline: "border-b pb-2 text-[15px] border-slate-200/80 focus:border-violet-500 dark:border-white/10 dark:focus:border-violet-400 text-slate-900 dark:text-white placeholder-slate-400/60 dark:placeholder-white/25",
+        solid: "px-4 py-2.5 rounded-2xl bg-slate-100/60 focus:bg-white border border-slate-200/60 focus:border-violet-400/50 text-[13px] text-slate-900 dark:bg-white/5 dark:border-white/8 dark:focus:bg-white/8 dark:focus:border-violet-400/40 dark:text-white",
     },
 
-    // --- KARTLAR & SEÇİM ---
+    // --- KARTLAR (border-glow-card kullanıyor artık) ---
     card: {
-        base: "w-full flex flex-col rounded-3xl border text-left transition-all duration-300 relative group cursor-pointer overflow-hidden backdrop-blur-md",
-        
-        // Hover tabanlı spot aydınlatma mantığı için zeminler (animasyonlar CSS ile çözülecek)
-        active: "bg-gradient-to-br from-indigo-50/50 to-purple-50/30 dark:from-indigo-900/20 dark:to-purple-900/10 border-indigo-400 shadow-md shadow-indigo-500/10 ring-2 ring-indigo-500/20 scale-[1.01] z-10",
-        inactive: "bg-white/60 dark:bg-neutral-900/60 border-slate-200/60 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 hover:bg-white/90 dark:hover:bg-neutral-800/80 shadow-sm hover:shadow-md"
+        base: "border-glow-card w-full text-left group cursor-pointer",
+        active: "is-selected",
+        inactive: ""
     },
 
     // --- SWITCH / TOGGLE ---
     toggle: {
-        base: "w-11 h-6 rounded-full relative transition-colors duration-300 focus:outline-none flex-shrink-0 cursor-pointer",
-        active: "bg-indigo-500",
-        inactive: "bg-slate-300 dark:bg-neutral-700",
-        thumbBase: "absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-sm",
-        thumbActive: "translate-x-5",
+        base: "w-9 h-5 rounded-full relative transition-colors duration-200 focus:outline-none flex-shrink-0 cursor-pointer",
+        active: "bg-violet-500",
+        inactive: "bg-slate-300 dark:bg-white/15",
+        thumbBase: "absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm",
+        thumbActive: "translate-x-4",
         thumbInactive: "translate-x-0"
     },
 
     // --- SKELETON LOADING ---
-    skeleton: "animate-pulse bg-slate-200 dark:bg-neutral-800 rounded-lg",
+    skeleton: "animate-pulse bg-slate-200/70 dark:bg-white/6 rounded-xl",
 
-    // --- SWITCHER ---
+    // --- SWITCHER (pill tabs) ---
     switcher: {
-        container: "flex items-center p-1 rounded-xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]",
-        containerDark: "bg-neutral-900/80 border border-white/10",
-        containerLightMd: "bg-slate-100/80 border border-slate-200/60",
-        btnBase: "rounded-lg font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 ring-indigo-500",
-        btnActive: "bg-white dark:bg-neutral-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200 dark:border-white/10",
-        btnInactive: "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transparent border border-transparent"
+        container: "flex items-center p-1 rounded-xl",
+        containerDark: "bg-white/5 border border-white/8",
+        containerLightMd: "bg-slate-100/70 border border-slate-200/60",
+        btnBase: "rounded-lg font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 ring-violet-500/50 text-[10px]",
+        btnActive: "bg-white dark:bg-white/10 text-violet-600 dark:text-violet-400 shadow-sm border border-slate-200/80 dark:border-white/10",
+        btnInactive: "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 border border-transparent"
     }
 };
 
@@ -538,37 +536,10 @@ const Modal = ({ open, onClose, title, subtitle, icon: Icon, maxW = 'max-w-2xl',
 };
 
 const SectionWrapper = ({ title, colorTheme, isDark, outerClassName = '', containerClassName = '', customBg = '', innerRef, children }) => {
-    const themes = {
-        indigo: {
-            badge: 'bg-indigo-100/80 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border-indigo-300/60 dark:border-indigo-700/50 shadow-indigo-500/10',
-            border: 'border-t-2 border-t-indigo-500/70',
-            bg: isDark ? 'bg-neutral-900/50 ring-indigo-500/10' : 'bg-white/60 ring-indigo-500/5',
-            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(99,102,241,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(99,102,241,0.1)]'
-        },
-        emerald: {
-            badge: 'bg-emerald-100/80 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border-emerald-300/60 dark:border-emerald-700/50 shadow-emerald-500/10',
-            border: 'border-t-2 border-t-emerald-500/70',
-            bg: isDark ? 'bg-neutral-900/50 ring-emerald-500/10' : 'bg-white/60 ring-emerald-500/5',
-            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(16,185,129,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(16,185,129,0.1)]'
-        },
-        amber: {
-            badge: 'bg-amber-100/80 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/50 shadow-amber-500/10',
-            border: 'border-t-2 border-t-amber-500/70',
-            bg: isDark ? 'bg-neutral-900/50 ring-amber-500/10' : 'bg-white/60 ring-amber-500/5',
-            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(245,158,11,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(245,158,11,0.1)]'
-        },
-        rose: {
-            badge: 'bg-rose-100/80 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 border-rose-300/60 dark:border-rose-700/50',
-            border: 'border-t-2 border-t-rose-500/70',
-            bg: customBg,
-            glow: isDark ? 'shadow-[0_0_40px_-10px_rgba(244,63,94,0.2)]' : 'shadow-[0_8px_32px_-8px_rgba(244,63,94,0.08)]'
-        }
-    };
-    const theme = themes[colorTheme] || themes.indigo;
     return (
         <div ref={innerRef} className={`relative flex-shrink-0 ${outerClassName}`}>
-            <span className={`absolute -top-3 left-6 z-20 px-3 py-0.5 text-[10px] font-bold tracking-widest rounded-full border shadow-sm backdrop-blur-md ${theme.badge}`}>{String(title)}</span>
-            <div className={`backdrop-blur-xl ring-1 ${theme.border} ${theme.bg} ${theme.glow} ${containerClassName} bg-gradient-to-br from-white/80 to-white/40 dark:from-neutral-900/80 dark:to-neutral-900/40 border-white/20 dark:border-white/5`}>{children}</div>
+            <span className="section-label absolute -top-3.5 left-5 z-20">{String(title)}</span>
+            <div className={`surface-card rounded-3xl ${containerClassName} ${customBg}`}>{children}</div>
         </div>
     );
 };
@@ -582,8 +553,24 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
         const rect = cardRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        cardRef.current.style.setProperty('--mouse-x', `${x}px`);
-        cardRef.current.style.setProperty('--mouse-y', `${y}px`);
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        // Cursor angle (from top, clockwise in degrees)
+        const angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI) + 90;
+        const normAngle = ((angle % 360) + 360) % 360;
+        // Edge proximity 0-100 (100 = touching the edge)
+        const dLeft = x, dRight = rect.width - x, dTop = y, dBottom = rect.height - y;
+        const minDist = Math.min(dLeft, dRight, dTop, dBottom);
+        const threshold = 90;
+        const proximity = Math.max(0, Math.min(100, 100 - (minDist / threshold) * 100));
+
+        cardRef.current.style.setProperty('--edge-proximity', proximity);
+        cardRef.current.style.setProperty('--cursor-angle', `${normAngle}deg`);
+    };
+
+    const handleMouseLeave = () => {
+        if (!cardRef.current) return;
+        cardRef.current.style.setProperty('--edge-proximity', 0);
     };
 
     const wordCount = React.useMemo(() => {
@@ -593,78 +580,96 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
 
     const badgeNorm = String(item.badge || '').toLowerCase().trim();
     const labelNorm = String(item.label || '').toLowerCase().trim();
-
-    // Akıllı Badge Gizleme
-    const showBadge = badgeNorm !== '' &&
-        badgeNorm !== 'undefined' &&
-        badgeNorm !== 'null' &&
-        !labelNorm.includes(badgeNorm) &&
-        !badgeNorm.includes(labelNorm);
+    const showBadge = badgeNorm !== '' && badgeNorm !== 'undefined' && badgeNorm !== 'null'
+        && !labelNorm.includes(badgeNorm) && !badgeNorm.includes(labelNorm);
 
     return (
         <div
             ref={cardRef}
-            role="button" tabIndex={0} 
+            role="button"
+            tabIndex={0}
             onClick={(e) => { e.stopPropagation(); onSelect(); }}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(); } }}
             onMouseMove={handleMouseMove}
-            className={`${UI_STYLES.card.base} hover-glow-card ${isSelected ? UI_STYLES.card.active : UI_STYLES.card.inactive}`}
+            onMouseLeave={handleMouseLeave}
+            className={`${UI_STYLES.card.base} ${isSelected ? UI_STYLES.card.active : UI_STYLES.card.inactive}`}
         >
-                
-                {/* Shimmer efekti — hover'da görünür */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10">
-                    <div className="absolute inset-0 shimmer-overlay rounded-3xl" />
-                </div>
-            {/* Seçiliyse subtle glow overlay */}
-            {isSelected && <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 pointer-events-none rounded-3xl" />}
+            {/* Border-glow outer glow layer */}
+            <div className="edge-light" />
 
-            {(item.image || item.video) && !imgError && (
-                <div className="w-full h-28 bg-slate-200 dark:bg-slate-800/60 border-b border-slate-200/50 dark:border-white/5 relative overflow-hidden flex items-center justify-center">
-                    {item.image
-                        ? <img src={item.image} alt="" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={() => setImgError(true)} />
-                        : <div className="text-slate-400"><ImageIcon size={24} /></div>
-                    }
-                </div>
-            )}
-            <div className="p-5 flex flex-col h-full relative z-10">
-                <div className="flex flex-col items-start w-full mb-3 pr-6">
-                    {showBadge && (
-                        <span className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-200/80 dark:border-indigo-400/20 mb-1.5 backdrop-blur-sm">
-                            {String(item.badge)}
-                        </span>
-                    )}
-                    <span className={`text-[15px] font-black leading-tight tracking-tight ${
-                        isSelected ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-800 dark:text-slate-200'
-                    }`}>{String(item.label)}</span>
-                </div>
-                <div className="space-y-2.5 w-full pr-2 flex-1 flex flex-col">
-                    {item.meaning && <span className="text-[12px] italic font-medium block leading-relaxed text-slate-500 dark:text-slate-400">{String(item.meaning)}</span>}
-                    {item.trigger && (
-                        <div className={`mt-auto p-2.5 rounded-xl border w-full transition-all ${
-                            isSelected
-                                ? 'bg-indigo-500/8 border-indigo-300/50 dark:bg-indigo-500/10 dark:border-indigo-500/20'
-                                : 'bg-slate-50/80 border-slate-200/60 dark:bg-white/3 dark:border-white/8 backdrop-blur-sm'
-                        }`}>
-                            <div className="flex items-center justify-between mb-1">
-                                <span className={`text-[8px] font-black uppercase tracking-widest ${
-                                    isSelected ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'
-                                }`}>Trigger</span>
-                                <span className={`text-[9px] font-bold ${
-                                    isSelected ? 'text-indigo-400' : 'text-slate-400'
-                                }`}>({wordCount} kelime)</span>
-                            </div>
-                            <span className={`text-[11px] font-mono leading-relaxed block break-words ${
-                                isSelected ? 'text-indigo-800 dark:text-indigo-200 font-bold' : 'text-slate-600 dark:text-slate-400'
-                            }`}>
-                                {String(item.trigger)}
+            <div className="border-glow-inner">
+                {/* Card image */}
+                {(item.image || item.video) && !imgError && (
+                    <div className="w-full h-28 bg-slate-100 dark:bg-white/5 border-b border-black/5 dark:border-white/5 relative overflow-hidden flex items-center justify-center flex-shrink-0">
+                        {item.image
+                            ? <img src={item.image} alt="" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={() => setImgError(true)} />
+                            : <div className="text-slate-400"><ImageIcon size={24} /></div>
+                        }
+                    </div>
+                )}
+
+                {/* Card body */}
+                <div className="p-4 flex flex-col flex-1">
+                    <div className="flex flex-col items-start w-full mb-2 pr-7">
+                        {showBadge && (
+                            <span className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-500/12 text-violet-600 dark:text-violet-400 border border-violet-200/60 dark:border-violet-400/18 mb-1.5">
+                                {String(item.badge)}
                             </span>
-                        </div>
-                    )}
+                        )}
+                        <span className={`text-[14px] font-black leading-tight tracking-tight ${
+                            isSelected ? 'text-violet-700 dark:text-violet-300' : 'text-slate-800 dark:text-slate-100'
+                        }`}>{String(item.label)}</span>
+                    </div>
+
+                    <div className="flex-1 flex flex-col gap-2">
+                        {item.meaning && (
+                            <span className="text-[11px] font-medium leading-relaxed text-slate-500 dark:text-slate-400 italic">
+                                {String(item.meaning)}
+                            </span>
+                        )}
+                        {item.trigger && (
+                            <div className={`mt-auto p-2.5 rounded-xl border transition-all ${
+                                isSelected
+                                    ? 'bg-violet-500/6 border-violet-400/30 dark:bg-violet-500/10 dark:border-violet-500/20'
+                                    : 'bg-slate-50/80 border-slate-200/50 dark:bg-white/3 dark:border-white/6'
+                            }`}>
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className={`text-[8px] font-black uppercase tracking-widest ${
+                                        isSelected ? 'text-violet-500 dark:text-violet-400' : 'text-slate-400'
+                                    }`}>Trigger</span>
+                                    <span className="text-[8px] font-bold text-slate-400">({wordCount}w)</span>
+                                </div>
+                                <span className={`text-[10px] font-['Geist_Mono',monospace] leading-relaxed block break-words ${
+                                    isSelected ? 'text-violet-800 dark:text-violet-200 font-semibold' : 'text-slate-500 dark:text-slate-400'
+                                }`}>
+                                    {String(item.trigger)}
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
+                {/* Selected checkmark */}
+                {isSelected && (
+                    <div className="absolute top-3.5 right-3.5 w-5 h-5 rounded-full bg-violet-500 flex items-center justify-center shadow-md shadow-violet-500/40 z-20">
+                        <Check size={11} className="text-white" strokeWidth={3} />
+                    </div>
+                )}
+
+                {/* Edit manual button (hover only) */}
+                {!isMultiSelect && (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onEditManual(); }}
+                        className={`absolute bottom-3.5 right-3.5 z-20 p-1.5 rounded-lg border opacity-0 group-hover:opacity-100 transition-all duration-200 ${
+                            isDark
+                                ? 'bg-white/8 border-white/10 text-slate-300 hover:text-violet-400 hover:border-violet-500/30'
+                                : 'bg-white border-slate-200/80 text-slate-400 hover:text-violet-600 hover:border-violet-200'
+                        } backdrop-blur-md shadow-sm`}
+                    >
+                        <Edit2 size={11} />
+                    </button>
+                )}
             </div>
-            {isSelected && <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/40 z-20"><Check size={13} className="text-white" strokeWidth={3} /></div>}
-            {!isMultiSelect && <button onClick={(e) => { e.stopPropagation(); onEditManual(); }} className={`absolute bottom-4 right-4 z-20 p-2 rounded-xl shadow-md border opacity-0 group-hover:opacity-100 transition-all duration-200 ${
-                isDark ? 'bg-neutral-800/90 border-white/10 text-white hover:text-indigo-400 hover:border-indigo-500/30' : 'bg-white/90 border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200'
-            } backdrop-blur-md`}><Edit2 size={13} /></button>}
         </div>
     );
 };
@@ -1577,20 +1582,51 @@ const App = () => {
                 </div>
             )}
 
-            <header className={`border-b shadow-[0_4px_30px_rgb(0,0,0,0.05)] backdrop-blur-xl px-6 py-3 sticky top-0 z-50 flex-shrink-0 relative ${state.isDark ? 'bg-neutral-950/70 border-white/10' : 'bg-white/80 border-slate-200'}`}>
+            <header className={`border-b backdrop-blur-2xl px-5 py-3 sticky top-0 z-50 flex-shrink-0 ${state.isDark ? 'bg-black/50 border-white/6' : 'bg-white/75 border-black/6'}`}>
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <DynamicIcon name="Sparkles" size={24} className="text-indigo-500 drop-shadow-sm" />
-                        <h1 className="text-[15px] font-semibold tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hidden md:block font-['Montserrat']">PROMPT STUDIO</h1>
+                    {/* Logo */}
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center shadow-md shadow-violet-500/25">
+                            <Sparkles size={14} className="text-white" />
+                        </div>
+                        <span className="text-[13px] font-black tracking-[0.2em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 hidden sm:block">PROMPT STUDIO</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <button onClick={() => dispatch({ type: A.TOGGLE_LANGUAGE })} className={`px-4 py-1.5 rounded-full text-[11px] font-black tracking-widest transition-all border ${state.isDark ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}>{state.language === 'en' ? 'EN' : 'TR'}</button>
-                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showPresetsModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Kaydedilen Şablonlar"><Layers size={16} /></button>
-                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showHistoryModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Otomatik Geçmiş"><History size={16} /></button>
-                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showAdminModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Veritabanı Yönetimi"><Settings size={16} /></button>
-                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showDebugModal', value: true })} className={`p-2.5 rounded-full transition-all text-slate-400 hover:text-indigo-500`} title="Dev Payload Viewer"><TerminalSquare size={16} /></button>
-                        <button role="switch" aria-checked={state.isDark} onClick={() => dispatch({ type: A.SET_STATE, key: 'isDark', value: !state.isDark })} className={`p-2.5 rounded-full border transition-all shadow-sm ${state.isDark ? 'bg-white/5 border-white/10 hover:bg-white/10 text-slate-300' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'}`}>
-                            {state.isDark ? <Sun size={16} /> : <Moon size={16} />}
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-1">
+                        {/* Language toggle */}
+                        <button
+                            onClick={() => dispatch({ type: A.TOGGLE_LANGUAGE })}
+                            className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all border ${state.isDark ? 'bg-white/5 border-white/8 text-slate-300 hover:bg-white/10' : 'bg-white/80 border-black/8 text-slate-600 hover:bg-white'}`}
+                        >
+                            {state.language === 'en' ? 'EN' : 'TR'}
+                        </button>
+
+                        {/* Icon buttons */}
+                        {[
+                            { icon: Layers, title: 'Şablonlar', key: 'showPresetsModal' },
+                            { icon: History, title: 'Geçmiş', key: 'showHistoryModal' },
+                            { icon: Settings, title: 'Veritabanı', key: 'showAdminModal' },
+                            { icon: TerminalSquare, title: 'Dev Debugger', key: 'showDebugModal' },
+                        ].map(({ icon: Icon, title, key }) => (
+                            <button
+                                key={key}
+                                onClick={() => dispatch({ type: A.SET_STATE, key, value: true })}
+                                title={title}
+                                className={`p-2 rounded-xl transition-all ${state.isDark ? 'text-slate-500 hover:text-violet-400 hover:bg-white/6' : 'text-slate-400 hover:text-violet-600 hover:bg-violet-50'}`}
+                            >
+                                <Icon size={15} />
+                            </button>
+                        ))}
+
+                        {/* Dark mode */}
+                        <button
+                            role="switch"
+                            aria-checked={state.isDark}
+                            onClick={() => dispatch({ type: A.SET_STATE, key: 'isDark', value: !state.isDark })}
+                            className={`p-2 rounded-xl border transition-all ml-1 ${state.isDark ? 'bg-white/5 border-white/8 text-slate-400 hover:text-yellow-400 hover:bg-white/8' : 'bg-white border-black/8 text-slate-500 hover:text-violet-600 hover:bg-violet-50'}`}
+                        >
+                            {state.isDark ? <Sun size={15} /> : <Moon size={15} />}
                         </button>
                     </div>
                 </div>
@@ -1610,11 +1646,11 @@ const App = () => {
             ) : (
                 <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:px-8 lg:py-8 flex flex-col gap-6 relative z-10 min-h-0">
 
-                {/* ÜRÜN VE SAHNE — yardımcı / destekleyici hiyerarşi */}
-                <SectionWrapper title="ÜRÜN VE SAHNE" colorTheme="indigo" isDark={state.isDark} containerClassName={`flex flex-col gap-6 p-6 lg:p-8 rounded-[2rem] ${state.isDark ? 'opacity-90' : 'opacity-95'}`}>
-                    {/* Sağ üst köşe butonları */}
-                    <div className="flex items-center justify-between w-full mb-6">
-                        <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                {/* ÜRÜN VE SAHNE */}
+                <SectionWrapper title="ÜRÜN VE SAHNE" colorTheme="indigo" isDark={state.isDark} containerClassName="flex flex-col gap-5 p-5 lg:p-7">
+                    {/* Üst aksiyon çubuğu */}
+                    <div className="flex items-center justify-between w-full">
+                        <span className={`text-[9px] font-black uppercase tracking-widest ${state.isDark ? 'text-white/25' : 'text-slate-400'}`}>
                             {state.selectedProductId ? 'Şablon Düzenleniyor' : 'Yeni Ürün'}
                         </span>
                         <div className="flex items-center gap-2">
@@ -1623,7 +1659,8 @@ const App = () => {
                                 disabled={state.isGeneratingMagic}
                                 className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${UI_STYLES.button.ai}`}
                             >
-                                {state.isGeneratingMagic ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} İlham Ver
+                                {state.isGeneratingMagic ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+                                İlham Ver
                             </button>
                             <button
                                 onClick={() => {
@@ -1637,7 +1674,7 @@ const App = () => {
                                 }}
                                 className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${UI_STYLES.button.primary}`}
                             >
-                                <Save size={14} /> Kaydet
+                                <Save size={13} /> Kaydet
                             </button>
                         </div>
                     </div>
@@ -1714,38 +1751,43 @@ const App = () => {
                     </div>
                 </SectionWrapper>
 
-                {/* MODE + FORMAT SEÇİCİ — birleşik blok */}
-                <div className="w-full flex flex-col items-center gap-3 py-2 animate-in fade-in slide-in-from-bottom-2 relative z-30">
-                    {/* Ana mod seçici */}
-                    <div className={`flex p-2 rounded-[2.5rem] w-full max-w-4xl border shadow-xl transition-all ${state.isDark ? 'bg-black/40 border-white/10 backdrop-blur-md' : 'bg-white/80 border-slate-200 backdrop-blur-md'}`}>
-                        <button
-                            onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: 'visual' })}
-                            className={`flex-1 py-4 text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] rounded-[2rem] transition-all flex items-center justify-center gap-3 ${state.appMode === 'visual' ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-500/30 scale-[1.02]' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5'}`}
-                        >
-                            <Camera size={18} /> <span className="hidden sm:inline">GÖRSEL ÜRETİMİ</span><span className="sm:hidden">GÖRSEL</span>
-                        </button>
-                        <button
-                            onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: 'marketing' })}
-                            className={`flex-1 py-4 text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] rounded-[2rem] transition-all flex items-center justify-center gap-3 ${state.appMode === 'marketing' ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/30 scale-[1.02]' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5'}`}
-                        >
-                            <Target size={18} /> <span className="hidden sm:inline">PAZARLAMA STRATEJİSİ</span><span className="sm:hidden">STRATEJİ</span>
-                        </button>
+                {/* MODE + FORMAT SEÇİCİ */}
+                <div className="w-full flex flex-col items-center gap-2.5 animate-in fade-in slide-in-from-bottom-2 relative z-30">
+                    <div className={`flex p-1.5 rounded-2xl w-full max-w-2xl border transition-all ${state.isDark ? 'bg-white/4 border-white/7' : 'bg-white/80 border-black/7'} backdrop-blur-md shadow-sm`}>
+                        {[
+                            { mode: 'visual', icon: Camera, labelFull: 'GÖRSEL ÜRETİMİ', labelShort: 'GÖRSEL', color: 'from-violet-600 to-violet-500', shadow: 'shadow-violet-500/30' },
+                            { mode: 'marketing', icon: Target, labelFull: 'PAZARLAMA STRATEJİSİ', labelShort: 'STRATEJİ', color: 'from-emerald-600 to-cyan-500', shadow: 'shadow-emerald-500/30' }
+                        ].map(({ mode, icon: Icon, labelFull, labelShort, color, shadow }) => (
+                            <button
+                                key={mode}
+                                onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: mode })}
+                                className={`flex-1 py-3 text-[10px] lg:text-[11px] font-black uppercase tracking-[0.18em] rounded-xl transition-all flex items-center justify-center gap-2.5 ${
+                                    state.appMode === mode
+                                        ? `bg-gradient-to-r ${color} text-white shadow-md ${shadow}`
+                                        : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                                }`}
+                            >
+                                <Icon size={15} />
+                                <span className="hidden sm:inline">{labelFull}</span>
+                                <span className="sm:hidden">{labelShort}</span>
+                            </button>
+                        ))}
                     </div>
-                    {/* Format seçici — sadece Görsel Üretimi modunda, animasyonlu */}
+
                     {state.appMode === 'visual' && (
-                        <div className="flex items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mr-1">Format:</span>
+                        <div className="flex items-center gap-1.5 animate-in fade-in duration-200">
+                            <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 mr-1">Format</span>
                             {DATA_CONFIG.FORMATS.map(f => (
                                 <button
                                     key={f.id}
                                     onClick={() => dispatch({ type: A.SET_FORMAT, payload: f.id })}
-                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
+                                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider transition-all border ${
                                         state.activeFormat === f.id
-                                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/30'
-                                            : (state.isDark ? 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-200' : 'bg-white border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600')
+                                            ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-500/30'
+                                            : (state.isDark ? 'bg-white/4 border-white/8 text-slate-500 hover:text-slate-300 hover:border-white/15' : 'bg-white border-black/8 text-slate-500 hover:text-violet-600 hover:border-violet-300/60')
                                     }`}
                                 >
-                                    <DynamicIcon name={f.iconName} size={12} />
+                                    <DynamicIcon name={f.iconName} size={10} />
                                     {f.label}
                                 </button>
                             ))}
@@ -1754,8 +1796,8 @@ const App = () => {
                 </div>
 
                 <SectionWrapper
-                    title={state.appMode === 'visual' ? "GÖRSEL ÜRETİMİ PARAMETRELERİ" : "PAZARLAMA STRATEJİSİ PARAMETRELERİ"}
-                    colorTheme="emerald" isDark={state.isDark} containerClassName="flex flex-col lg:flex-row rounded-[2.5rem] overflow-hidden lg:h-[700px] h-auto min-h-[800px] relative z-10">
+                    title={state.appMode === 'visual' ? "GÖRSEL PARAMETRELERİ" : "PAZARLAMA PARAMETRELERİ"}
+                    colorTheme="emerald" isDark={state.isDark} containerClassName="flex flex-col lg:flex-row overflow-hidden lg:h-[700px] h-auto min-h-[800px] relative z-10">
                     <CategorySidebar
                         isDark={state.isDark} isReorderMode={state.isReorderMode} onToggleReorder={() => dispatch({ type: A.SET_STATE, key: 'isReorderMode', value: !state.isReorderMode })}
                         isDataLoaded={state.isDataLoaded} categoryOrder={state.categoryOrder} availableCategories={availableCategories}
@@ -1775,19 +1817,20 @@ const App = () => {
                                     <><DynamicIcon name={availableCategories.find(c => c.id === state.activeCategoryTab).iconName} size={24} className="text-indigo-600 dark:text-indigo-400" /><h2 className="text-base font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">{String(availableCategories.find(c => c.id === state.activeCategoryTab)?.title || '')}</h2></>
                                 ) : (<div className="h-6 w-40 bg-slate-200 dark:bg-white/10 rounded animate-pulse"></div>)}
                             </div>
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
                                 {availableCategories.find(c => c.id === state.activeCategoryTab) && (
                                     <div className={`${UI_STYLES.switcher.container} ${state.isDark ? UI_STYLES.switcher.containerDark : UI_STYLES.switcher.containerLightMd}`}>
-                                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'itemSortMode', value: 'group' })} className={`${UI_STYLES.switcher.btnBase} px-3 py-1 text-[10px] gap-1 ${state.itemSortMode === 'group' ? UI_STYLES.switcher.btnActive : UI_STYLES.switcher.btnInactive}`}><Layers size={12} /> Gruplu</button>
-                                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'itemSortMode', value: 'az' })} className={`${UI_STYLES.switcher.btnBase} px-3 py-1 text-[10px] gap-1 ${state.itemSortMode === 'az' ? UI_STYLES.switcher.btnActive : UI_STYLES.switcher.btnInactive}`}><List size={12} /> A-Z</button>
+                                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'itemSortMode', value: 'group' })} className={`${UI_STYLES.switcher.btnBase} px-2.5 py-1 gap-1 ${state.itemSortMode === 'group' ? UI_STYLES.switcher.btnActive : UI_STYLES.switcher.btnInactive}`}><Layers size={11} /> Grup</button>
+                                        <button onClick={() => dispatch({ type: A.SET_STATE, key: 'itemSortMode', value: 'az' })} className={`${UI_STYLES.switcher.btnBase} px-2.5 py-1 gap-1 ${state.itemSortMode === 'az' ? UI_STYLES.switcher.btnActive : UI_STYLES.switcher.btnInactive}`}><List size={11} /> A-Z</button>
                                     </div>
                                 )}
                                 {availableCategories.find(c => c.id === state.activeCategoryTab) && (
                                     <button
                                         onClick={() => dispatch((s) => ({ type: A.SET_STATE, key: 'isManualOpen', value: { ...s.isManualOpen, [state.activeCategoryTab]: !s.isManualOpen[state.activeCategoryTab] } }))}
-                                        className={`flex items-center gap-1 p-2 rounded-xl border transition-all shadow-sm ${state.isManualOpen[state.activeCategoryTab] ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : (state.isDark ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-white border-slate-200 text-slate-500')}`}
+                                        className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${state.isManualOpen[state.activeCategoryTab] ? UI_STYLES.button.primary : UI_STYLES.button.outline}`}
                                     >
-                                        {state.isManualOpen[state.activeCategoryTab] ? <X size={14} /> : <Plus size={14} />} <span className="text-[10px] font-bold uppercase hidden md:inline">Ekle</span>
+                                        {state.isManualOpen[state.activeCategoryTab] ? <X size={12} /> : <Plus size={12} />}
+                                        <span className="hidden md:inline">{state.isManualOpen[state.activeCategoryTab] ? 'Kapat' : 'Özel Ekle'}</span>
                                     </button>
                                 )}
                             </div>
@@ -1923,7 +1966,7 @@ const App = () => {
                     </div>
                 </SectionWrapper>
 
-                <SectionWrapper title="ÇIKTI VE OPTİMİZASYON" colorTheme="rose" isDark={state.isDark} innerRef={footerRef} outerClassName="mt-1" customBg={dynBg} containerClassName="flex flex-col rounded-[2.5rem] dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden transition-colors duration-500">
+                <SectionWrapper title="ÇIKTI VE OPTİMİZASYON" colorTheme="rose" isDark={state.isDark} innerRef={footerRef} outerClassName="mt-1" customBg={dynBg} containerClassName="flex flex-col overflow-hidden transition-colors duration-500">
                     {state.compiledResult.conflicts_found && state.compiledResult.conflicts_found.length > 0 && state.footerTab === 'ai' && (
                         <button onClick={() => dispatch({ type: A.SET_STATE, key: 'showAiNoteModal', value: true })} className="w-full bg-amber-50 dark:bg-amber-500/10 border-b border-amber-200 dark:border-amber-500/20 px-6 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-all text-left mt-6">
                             <AlertTriangle size={16} className="text-amber-600 dark:text-amber-500 flex-shrink-0" />
@@ -1964,8 +2007,8 @@ const App = () => {
                                     <span className="text-[9px] uppercase tracking-wider">AUTO</span>
                                 </label>
                             </div>
-                            <MasterAiButton onClick={handleGenerateVariations} disabled={!state.hasCompiled || state.isGeneratingVariations} loading={state.isGeneratingVariations} text="✨ VARYASYON ÜRET" className="px-6 py-3 text-[11px] shadow-xl rounded-full bg-gradient-to-r from-pink-600 via-rose-500 to-red-500 hover:shadow-[0_0_25px_rgba(225,29,72,0.6)]" />
-                            <MasterAiButton onClick={handleAiOptimize} disabled={!state.hasCompiled || state.isOptimizing} loading={state.isOptimizing} text={state.appMode === 'marketing' ? 'STRATEJİYİ METNE DÖK' : 'AI OPTİMİZE'} className="px-8 py-3 text-[11px] shadow-xl rounded-full" />
+                            <MasterAiButton onClick={handleGenerateVariations} disabled={!state.hasCompiled || state.isGeneratingVariations} loading={state.isGeneratingVariations} text="Varyasyon" className="px-4 py-2 text-[10px] shadow-md rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:shadow-[0_0_20px_rgba(244,63,94,0.5)]" />
+                            <MasterAiButton onClick={handleAiOptimize} disabled={!state.hasCompiled || state.isOptimizing} loading={state.isOptimizing} text={state.appMode === 'marketing' ? 'Metne Dök' : 'AI Optimize'} className="px-5 py-2 text-[10px] shadow-md rounded-full" />
                         </div>
                     </div>
                     <div className="p-6 flex items-stretch relative">
