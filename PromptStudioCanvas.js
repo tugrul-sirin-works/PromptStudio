@@ -179,8 +179,8 @@ const transformApiData = (categoriesTable, itemsTable) => {
             meaning_tr: String(item.meaning_tr || item.Tr_meaning || ''),
             meaning_en: String(item.meaning_en || ''),
             trigger: String(item.trigger_text || item.Trigger_text || ''),
-            image: (item.image_url || (item.Image && item.Image !== '[URL]')) ? String(item.image_url || item.Image) : null,
-            video: (item.video_url || (item.Video && item.Video !== '[URL]')) ? String(item.video_url || item.Video) : null,
+            image: item.image_url || item.Image && item.Image !== '[URL]' ? String(item.image_url || item.Image) : null,
+            video: item.video_url || item.Video && item.Video !== '[URL]' ? String(item.video_url || item.Video) : null,
             isDefault: toBool(item.is_default !== undefined ? item.is_default : item.Is_default),
             sortPriority: getOrder(item.sort_priority, item.Sort_priority)
         })).sort((a, b) => a.sortPriority - b.sortPriority);
@@ -896,7 +896,7 @@ const DebugPayloadModal = ({ open, onClose, debugPayload }) => {
  */
 const usePromptManager = () => {
     const [categories, setCategories] = useState([]);
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+    const apiKey = ""; // Çevresel anahtar sistem tarafından sağlanır
 
     const [state, dispatch] = useReducer(promptReducer, {
         isDataLoaded: false, product: '', description: '', isDark: false, isReorderMode: false, isReorderVertical: false, showInactiveInReorder: false, itemSortMode: 'group', isManualOpen: {}, autoCompile: true, activeFormat: 'image', activeCategoryTab: '', footerTab: 'raw', showDetailsList: false, customInput: "",
@@ -1539,7 +1539,99 @@ const App = () => {
     ).filter(h => !META_PROD_COLS.includes(h));
 
     return (
-        <div className={`min-h-screen w-full flex flex-col relative overflow-y-auto font-sans transition-colors duration-500 ${state.isDark ? 'dark bg-neutral-950 text-white' : 'bg-slate-50 text-slate-900'}`}>
+        <div className={`min-h-screen w-full flex flex-col relative bg-slate-50 overflow-y-auto ${state.isDark ? 'bg-neutral-950 text-white' : 'bg-slate-50 text-slate-900'} font-sans transition-colors duration-500`}>
+            <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&display=swap');
+        * { font-family: 'Inter', 'Montserrat', sans-serif; }
+
+        /* ---- AURORA ARKAPLAN ---- */
+        @keyframes aurora {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        .bg-mesh {
+            background-color: ${state.isDark ? '#080808' : '#fafafa'};
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 10%, ${state.isDark ? 'rgba(99,102,241,0.08)' : 'rgba(99,102,241,0.04)'} 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 0%,   ${state.isDark ? 'rgba(168,85,247,0.06)' : 'rgba(168,85,247,0.03)'} 0%, transparent 60%),
+                radial-gradient(ellipse 70% 50% at 50% 100%, ${state.isDark ? 'rgba(59,130,246,0.06)' : 'rgba(59,130,246,0.03)'} 0%, transparent 60%);
+            background-size: 200% 200%;
+            animation: aurora 25s ease infinite;
+        }
+
+        /* ---- SKELETON SHIMMER EFECTİ ---- */
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        /* ---- HOVER GLOW EFFECT (Fare İzleme) ---- */
+        .hover-glow-card {
+            position: relative;
+        }
+        .hover-glow-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(99, 102, 241, 0.08), transparent 40%);
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .hover-glow-card:hover::before {
+            opacity: 1;
+        }
+
+        /* ---- DOT GRID ---- */
+        .dot-grid {
+            background-image: radial-gradient(${state.isDark ? 'rgba(255,255,255,0.06)' : 'rgba(99,102,241,0.12)'} 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* ---- SHIMMER ---- */
+        @keyframes shimmer-move {
+          0% { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(250%) skewX(-15deg); }
+        }
+        .shimmer-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            animation: shimmer-move 2.5s ease-in-out infinite;
+            border-radius: inherit;
+        }
+
+        /* ---- SCROLLBAR ---- */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: ${state.isDark ? 'rgba(99,102,241,0.3)' : 'rgba(99,102,241,0.2)'};
+            border-radius: 99px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: ${state.isDark ? 'rgba(99,102,241,0.6)' : 'rgba(99,102,241,0.4)'};
+        }
+
+        /* ---- FADE MASK ---- */
+        .mask-fade-right { mask-image: linear-gradient(to right, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%); }
+
+        /* ---- GLASSMORPHISM PANEL ---- */
+        .glass-panel {
+            background: ${state.isDark ? 'rgba(15,15,25,0.6)' : 'rgba(255,255,255,0.65)'};
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+        }
+
+        /* ---- MOBILE ---- */
+        @media (max-width: 640px) {
+            .mobile-full { width: 100% !important; }
+            .mobile-px { padding-left: 1rem !important; padding-right: 1rem !important; }
+        }
+      `}</style>
             {/* Aurora animasyonlu arka plan + dot grid */}
             <div className="fixed inset-0 pointer-events-none bg-mesh z-0" />
             <div className="fixed inset-0 pointer-events-none dot-grid z-0 opacity-100" />
