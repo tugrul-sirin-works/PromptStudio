@@ -21,7 +21,8 @@ import {
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_CONFIGURED = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
+const supabase = SUPABASE_CONFIGURED ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const A = {
     SET_STATE: 'SET_STATE',
@@ -918,6 +919,7 @@ const usePromptManager = () => {
     const syncTimeoutRef = useRef(null);
 
     const syncToDatabase = useCallback((action, table, payload) => {
+        if (!supabase) return; // Supabase yapılandırılmamış — sessizce geç
         if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current);
         syncTimeoutRef.current = setTimeout(async () => {
             try {
@@ -967,10 +969,15 @@ const usePromptManager = () => {
 
     useEffect(() => {
         const fetchApiData = async () => {
+            // Supabase yapılandırılmamışsa boş veriyle devam et
+            if (!supabase) {
+                dispatch({ type: A.INITIALIZE, payload: { selections: {image:{},video:{},img2vid:{}}, activeCards: {image:{},video:{},img2vid:{}}, categoryOrder: [], activeCategoryTab: '', products: [], tableHeaders: { categories: [], items: [], products: [], marketing: [] }, marketingHeaders: [], marketingData: [], product: '', description: '' } });
+                return;
+            }
             try {
                 // Supabase JS client sorguları hata atmaz, { data, error } döner. O yüzden the promise.catch kullanılamaz.
                 const prodsPromise = supabase.from('products').select('*').order('Create_Time', { ascending: false }).then(res => res).catch(() => ({ data: [], error: null }));
-                
+
                 const [catsRes, itemsRes, prodsRes] = await Promise.all([
                     supabase.from('categories').select('*').order('order_index'),
                     supabase.from('items').select('*').order('sort_priority'),
@@ -1579,6 +1586,13 @@ const App = () => {
                         {state.error && typeof state.error === 'object' && state.error.context ? <span className="opacity-70 text-xs font-normal ml-1">({String(state.error.context)})</span> : null}
                     </span>
                     <button onClick={() => dispatch({ type: A.CLEAR_ERROR })} className="ml-2 hover:bg-white/20 p-1 rounded-full transition-all"><X size={16} /></button>
+                </div>
+            )}
+
+            {!SUPABASE_CONFIGURED && (
+                <div className="w-full z-40 flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold bg-amber-500/15 border-b border-amber-500/30 text-amber-400">
+                    <AlertTriangle size={14} className="flex-shrink-0" />
+                    <span>Demo modu — Supabase yapılandırılmamış. Veriler yüklenemiyor; kayıt ve AI özellikleri devre dışı.</span>
                 </div>
             )}
 
