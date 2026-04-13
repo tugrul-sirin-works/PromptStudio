@@ -253,6 +253,7 @@ const transformApiData = (categoriesTable, itemsTable) => {
             image: (item.image_url || (item.Image && item.Image !== '[URL]')) ? String(item.image_url || item.Image) : null,
             video: (item.video_url || (item.Video && item.Video !== '[URL]')) ? String(item.video_url || item.Video) : null,
             isDefault: toBool(item.is_default !== undefined ? item.is_default : item.Is_default),
+            isSystem: toBool(item.is_system !== undefined ? item.is_system : (item.Is_system !== undefined ? item.Is_system : true)),
             sortPriority: getOrder(item.sort_priority, item.Sort_priority)
         })).sort((a, b) => a.sortPriority - b.sortPriority);
 
@@ -696,19 +697,19 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
                                 {String(item.badge)}
                             </span>
                         )}
-                        <span className={`text-[14px] font-black leading-tight tracking-tight ${
+                        <span className={`text-[15px] font-black leading-tight tracking-tight ${
                             isSelected ? 'text-violet-700 dark:text-violet-300' : 'text-slate-800 dark:text-slate-100'
                         }`}>{String(item.label)}</span>
                     </div>
 
                     <div className="flex-1 flex flex-col gap-2">
                         {item.meaning && (
-                            <span className="text-[11px] font-medium leading-relaxed text-slate-500 dark:text-slate-400 italic">
+                            <span className="text-[12px] font-medium leading-relaxed text-slate-500 dark:text-slate-400 italic">
                                 {String(item.meaning)}
                             </span>
                         )}
                         {item.trigger && (
-                            <div className={`mt-auto p-2.5 rounded-xl border transition-all ${
+                            <div className={`mt-auto p-3 rounded-xl border transition-all ${
                                 isSelected
                                     ? 'bg-violet-500/6 border-violet-400/30 dark:bg-violet-500/10 dark:border-violet-500/20'
                                     : 'bg-slate-50/80 border-slate-200/50 dark:bg-white/3 dark:border-white/6'
@@ -719,7 +720,7 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
                                     }`}>Trigger</span>
                                     <span className="text-[8px] font-bold text-slate-400">({wordCount}w)</span>
                                 </div>
-                                <span className={`text-[10px] font-['Geist_Mono',monospace] leading-relaxed block break-words ${
+                                <span className={`text-[11px] font-['Geist_Mono',monospace] leading-relaxed block break-words ${
                                     isSelected ? 'text-violet-800 dark:text-violet-200 font-semibold' : 'text-slate-500 dark:text-slate-400'
                                 }`}>
                                     {String(item.trigger)}
@@ -780,9 +781,11 @@ const CategorySidebar = ({
     return (
         <div className={`lg:w-[320px] lg:h-full min-h-[180px] max-h-[300px] lg:max-h-none flex-shrink-0 flex flex-col border-b lg:border-b-0 border-r border-slate-200/50 dark:border-white/10 pt-4 relative z-30 ${isDark ? 'bg-black/20' : 'bg-slate-50/50'}`}>
             <div className="flex items-center min-h-[3.5rem] px-4 lg:px-8 border-b border-slate-200/50 dark:border-white/5 justify-between flex-shrink-0 bg-transparent backdrop-blur-md">
-                <div className="flex flex-col gap-0.5">
-                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">SEÇİM MODU</span>
-                    <span className="text-[9px] font-bold text-slate-400">({availableCategories.filter(c => activeCards[activeFormat]?.[c.id]).length}/{availableCategories.length})</span>
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">KATEGORİLER</span>
+                    <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20">
+                        {availableCategories.filter(c => activeCards[activeFormat]?.[c.id]).length}/{availableCategories.length}
+                    </span>
                 </div>
                 <button
                     onClick={onToggleReorder}
@@ -1014,13 +1017,13 @@ const usePromptManager = () => {
                 }
 
                 const notifId = Date.now();
-                dispatch({ type: A.ADD_NOTIFICATION, payload: { id: notifId, message: `✓ ${table} kaydedildi` } });
-                setTimeout(() => dispatch({ type: A.REMOVE_NOTIFICATION, payload: notifId }), 10000);
+                dispatch({ type: A.ADD_NOTIFICATION, payload: { id: notifId, message: '✓ Kaydedildi', type: 'success' } });
+                setTimeout(() => dispatch({ type: A.REMOVE_NOTIFICATION, payload: notifId }), 1500);
             } catch (err) {
                 console.error('Supabase Sync error:', err);
                 dispatch({ type: A.SET_ERROR, message: "Kayıt işlemi başarısız", context: err.message });
             }
-        }, 1500);
+        }, 500);
     }, []);
 
     const callGemini = async (payload, loadingKey) => {
@@ -1716,7 +1719,7 @@ const App = () => {
             {!SUPABASE_CONFIGURED && (
                 <div className="w-full z-40 flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold bg-amber-500/15 border-b border-amber-500/30 text-amber-400">
                     <AlertTriangle size={14} className="flex-shrink-0" />
-                    <span>Demo modu — Supabase yapılandırılmamış. Veriler yüklenemiyor; kayıt ve AI özellikleri devre dışı.</span>
+                    <span>Demo modunda çalışıyor — Sistem verileri yüklendi. Kayıt ve AI özellikleri için Supabase gerekli.</span>
                 </div>
             )}
 
@@ -2074,7 +2077,7 @@ const App = () => {
                     </div>{/* /content row */}
                 </SectionWrapper>
 
-                <SectionWrapper title="SIRALAMA VE ANALİZ" colorTheme="amber" isDark={state.isDark} containerClassName="relative flex flex-col p-5 px-6 rounded-2xl gap-4">
+                <SectionWrapper title="SIRALAMA" colorTheme="amber" isDark={state.isDark} containerClassName="relative flex flex-col p-5 px-6 rounded-2xl gap-4">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200/50 dark:border-white/10 pb-4 pt-2">
                         <div className="flex items-center gap-4">
                             <span className="text-[11px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">Sıralama Modu</span>
@@ -2108,7 +2111,8 @@ const App = () => {
                             return (
                                 <div key={id} draggable onDragStart={(e) => handleDragStart(e, id)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, id)} onDragEnd={handleDragEnd} className={`flex items-center gap-2 cursor-grab px-3 py-2 rounded-xl border transition-all ${isActive ? (state.isDark ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-white border-slate-200 text-slate-700 shadow-sm') : (state.isDark ? 'bg-transparent border-white/5 text-slate-500 border-dashed opacity-40 grayscale' : 'bg-slate-100 border-slate-300 text-slate-400 border-dashed opacity-40 grayscale')} ${draggedCat === id ? 'opacity-30 scale-95 border-indigo-500' : ''}`}>
                                     <GripVertical size={14} className="opacity-30" />
-                                    <span className="text-[10px] font-bold">{String(cat.title)}</span>
+                                    <DynamicIcon name={cat.iconName} size={12} className="opacity-60 flex-shrink-0" />
+                                    <span className="text-[11px] font-bold">{String(cat.title)}</span>
                                 </div>
                             );
                         })}
