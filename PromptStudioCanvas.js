@@ -77,66 +77,66 @@ const DATA_CONFIG = {
 };
 
 // =============================================================================
-// CENTRALIZED UI STYLES - MODERN AI / APPLE CONCEPT
+// CENTRALIZED UI STYLES  —  Dark Matter / ReactBits-inspired
 // =============================================================================
 const UI_STYLES = {
-    // --- BUTONLAR ---
+    // --- BUTTONS ---
     button: {
         base: "inline-flex items-center justify-center gap-1.5 font-bold tracking-wide rounded-full transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60",
         sm: "px-4 py-1.5 text-[11px]",
         md: "px-5 py-2 text-[12px]",
         lg: "px-7 py-2.5 text-[13px]",
 
-        // Ana aksiyon — violet
-        primary: "bg-violet-600 text-white hover:bg-violet-500 shadow-sm shadow-violet-500/20 hover:shadow-md hover:shadow-violet-500/25 border border-violet-500/30",
+        // Primary — violet glow
+        primary: "bg-violet-600 text-white hover:bg-violet-500 shadow-[0_0_12px_rgba(124,106,247,0.3)] hover:shadow-[0_0_20px_rgba(124,106,247,0.45)] border border-violet-400/30",
 
-        // İkincil / İptal
-        outline: "border border-slate-200/80 text-slate-600 bg-white/60 hover:bg-white hover:border-slate-300 dark:border-white/10 dark:text-slate-300 dark:bg-white/5 dark:hover:bg-white/10 dark:hover:border-white/20 backdrop-blur-sm",
+        // Outline — glass
+        outline: "border border-slate-200 text-slate-600 bg-white/50 hover:bg-white hover:border-violet-300/60 hover:text-violet-700 dark:border-white/10 dark:text-slate-300 dark:bg-white/5 dark:hover:bg-white/10 dark:hover:border-violet-500/30 dark:hover:text-violet-300 backdrop-blur-sm",
 
-        // Nötr ghost
-        ghost: "bg-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/8",
+        // Ghost — minimal
+        ghost: "bg-transparent text-slate-500 hover:text-slate-700 hover:bg-black/5 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/8",
 
-        // AI butonları — shimmer animasyonlu violet→cyan gradient
-        ai: "relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 text-white shadow-md shadow-violet-500/25 hover:shadow-lg hover:shadow-violet-500/35 border border-white/15 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/15 before:to-white/0 before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700",
+        // AI — shimmer gradient (violet → cyan) with glow
+        ai: "relative overflow-hidden bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-500 text-white shadow-[0_0_16px_rgba(124,106,247,0.35)] hover:shadow-[0_0_28px_rgba(124,106,247,0.55)] border border-white/15 before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/0 before:via-white/18 before:to-white/0 before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700",
 
-        // Tehlike / Silme
-        danger: "bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 border border-rose-500/20 dark:text-rose-400 dark:hover:bg-rose-500/25"
+        // Danger
+        danger: "bg-rose-500/8 text-rose-600 hover:bg-rose-500/18 border border-rose-500/20 dark:text-rose-400 dark:hover:bg-rose-500/25"
     },
 
-    // --- FORM ELEMANLARI ---
+    // --- INPUTS ---
     input: {
         base: "w-full bg-transparent outline-none transition-all duration-200 font-medium",
-        underline: "border-b pb-2 text-[15px] border-slate-200/80 focus:border-violet-500 dark:border-white/10 dark:focus:border-violet-400 text-slate-900 dark:text-white placeholder-slate-400/60 dark:placeholder-white/25",
-        solid: "px-4 py-2.5 rounded-2xl bg-slate-100/60 focus:bg-white border border-slate-200/60 focus:border-violet-400/50 text-[13px] text-slate-900 dark:bg-white/5 dark:border-white/8 dark:focus:bg-white/8 dark:focus:border-violet-400/40 dark:text-white",
+        underline: "border-b pb-2 text-[15px] border-slate-200 focus:border-violet-500 dark:border-white/10 dark:focus:border-violet-400 text-slate-900 dark:text-white placeholder-slate-400/50 dark:placeholder-white/20",
+        solid: "px-4 py-2.5 rounded-2xl bg-black/4 focus:bg-white border border-slate-200/70 focus:border-violet-400/60 text-[13px] text-slate-900 dark:bg-white/5 dark:border-white/8 dark:focus:bg-white/8 dark:focus:border-violet-400/40 dark:text-white",
     },
 
-    // --- KARTLAR (border-glow-card kullanıyor artık) ---
+    // --- CARDS ---
     card: {
         base: "border-glow-card w-full text-left group cursor-pointer",
         active: "is-selected",
         inactive: ""
     },
 
-    // --- SWITCH / TOGGLE ---
+    // --- TOGGLE ---
     toggle: {
         base: "w-9 h-5 rounded-full relative transition-colors duration-200 focus:outline-none flex-shrink-0 cursor-pointer",
-        active: "bg-violet-500",
-        inactive: "bg-slate-300 dark:bg-white/15",
+        active: "bg-violet-500 shadow-[0_0_8px_rgba(124,106,247,0.5)]",
+        inactive: "bg-slate-200 dark:bg-white/12",
         thumbBase: "absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform duration-200 shadow-sm",
         thumbActive: "translate-x-4",
         thumbInactive: "translate-x-0"
     },
 
-    // --- SKELETON LOADING ---
-    skeleton: "animate-pulse bg-slate-200/70 dark:bg-white/6 rounded-xl",
+    // --- SKELETON ---
+    skeleton: "skeleton-base",
 
     // --- SWITCHER (pill tabs) ---
     switcher: {
         container: "flex items-center p-1 rounded-xl",
         containerDark: "bg-white/5 border border-white/8",
-        containerLightMd: "bg-slate-100/70 border border-slate-200/60",
-        btnBase: "rounded-lg font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 ring-violet-500/50 text-[10px]",
-        btnActive: "bg-white dark:bg-white/10 text-violet-600 dark:text-violet-400 shadow-sm border border-slate-200/80 dark:border-white/10",
+        containerLightMd: "bg-black/4 border border-black/7",
+        btnBase: "rounded-lg font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 ring-violet-500/50 text-[10px] gap-1",
+        btnActive: "bg-white dark:bg-violet-500/15 text-violet-600 dark:text-violet-300 shadow-sm border border-violet-200/60 dark:border-violet-500/25",
         btnInactive: "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 border border-transparent"
     }
 };
@@ -381,11 +381,11 @@ const MasterAiButton = ({ onClick, disabled, loading, text, icon: Icon = Sparkle
     <button
         onClick={onClick}
         disabled={disabled}
-        className={`relative overflow-hidden group flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-yellow-300 shadow-[0_0_15px_rgba(99,102,241,0.4)] hover:shadow-[0_0_25px_rgba(99,102,241,0.6)] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50 border border-indigo-400/30 ${className}`}
+        className={`relative overflow-hidden group flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed border border-violet-400/25 shadow-[0_0_16px_rgba(124,106,247,0.35)] hover:shadow-[0_0_28px_rgba(124,106,247,0.55)] ${className}`}
     >
-        <div className="absolute inset-0 w-[200%] -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
-        {loading ? <Loader2 size={14} className="animate-spin text-yellow-300" /> : <Icon size={14} className="text-yellow-300 drop-shadow-md" />}
-        {text && <span className="relative z-10 text-white drop-shadow-md">{text}</span>}
+        <div className="absolute inset-0 w-[200%] -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:translate-x-full transition-transform duration-800 ease-out pointer-events-none"></div>
+        {loading ? <Loader2 size={13} className="animate-spin relative z-10" /> : <Icon size={13} className="relative z-10" />}
+        {text && <span className="relative z-10 text-[10px]">{text}</span>}
     </button>
 );
 
@@ -539,8 +539,8 @@ const Modal = ({ open, onClose, title, subtitle, icon: Icon, maxW = 'max-w-2xl',
 const SectionWrapper = ({ title, colorTheme, isDark, outerClassName = '', containerClassName = '', customBg = '', innerRef, children }) => {
     return (
         <div ref={innerRef} className={`relative flex-shrink-0 ${outerClassName}`}>
-            <span className="section-label absolute -top-3.5 left-5 z-20">{String(title)}</span>
-            <div className={`surface-card rounded-3xl ${containerClassName} ${customBg}`}>{children}</div>
+            <span className="section-label absolute -top-3.5 left-5 z-20 noise-overlay">{String(title)}</span>
+            <div className={`surface-card noise-overlay rounded-3xl ${containerClassName} ${customBg}`}>{children}</div>
         </div>
     );
 };
@@ -1446,6 +1446,20 @@ const App = () => {
     const [copiedVisual, setCopiedVisual] = useState(false);
 
     const sceneTextareaRef = useRef(null);
+    const rootRef = useRef(null);
+
+    // ReactBits cursor spotlight — sets --spotlight-x / --spotlight-y on root
+    useEffect(() => {
+        const el = rootRef.current;
+        if (!el) return;
+        const handleMouseMove = (e) => {
+            const rect = el.getBoundingClientRect();
+            el.style.setProperty('--spotlight-x', `${e.clientX - rect.left}px`);
+            el.style.setProperty('--spotlight-y', `${e.clientY - rect.top}px`);
+        };
+        el.addEventListener('mousemove', handleMouseMove, { passive: true });
+        return () => el.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     useEffect(() => {
         if (sceneTextareaRef.current) {
@@ -1551,10 +1565,16 @@ const App = () => {
     ).filter(h => !META_PROD_COLS.includes(h));
 
     return (
-        <div className={`min-h-screen w-full flex flex-col relative overflow-y-auto font-sans transition-colors duration-500 ${state.isDark ? 'dark bg-neutral-950 text-white' : 'bg-slate-50 text-slate-900'}`}>
-            {/* Aurora animasyonlu arka plan + dot grid */}
+        <div
+            ref={rootRef}
+            className={`min-h-screen w-full flex flex-col relative overflow-y-auto font-sans transition-colors duration-500 ${state.isDark ? 'dark bg-[#02020a] text-white' : 'bg-[#f4f3ff] text-slate-900'}`}
+        >
+            {/* Layer 1: Aurora mesh background */}
             <div className="fixed inset-0 pointer-events-none bg-mesh z-0" />
-            <div className="fixed inset-0 pointer-events-none dot-grid z-0 opacity-100" />
+            {/* Layer 2: Dot grid */}
+            <div className="fixed inset-0 pointer-events-none dot-grid z-0" />
+            {/* Layer 3: ReactBits cursor spotlight */}
+            <div className="fixed inset-0 pointer-events-none spotlight-layer z-0" />
 
             {state.notifications && state.notifications.length > 0 && (
                 <div className="fixed top-4 right-4 z-[400] flex flex-col gap-2 pointer-events-none">
@@ -1596,66 +1616,79 @@ const App = () => {
                 </div>
             )}
 
-            <header className={`border-b backdrop-blur-2xl px-5 py-3 sticky top-0 z-50 flex-shrink-0 ${state.isDark ? 'bg-black/50 border-white/6' : 'bg-white/75 border-black/6'}`}>
+            <header className={`border-b backdrop-blur-2xl px-5 py-2.5 sticky top-0 z-50 flex-shrink-0 transition-all ${state.isDark ? 'bg-[#02020a]/70 border-white/6' : 'bg-white/72 border-black/6'}`}>
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                     {/* Logo */}
-                    <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center shadow-md shadow-violet-500/25">
-                            <Sparkles size={14} className="text-white" />
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-[10px] bg-gradient-to-br from-violet-500 via-purple-600 to-cyan-500 flex items-center justify-center shadow-[0_0_14px_rgba(124,106,247,0.45)] flex-shrink-0">
+                            <Sparkles size={15} className="text-white" />
                         </div>
-                        <span className="text-[13px] font-black tracking-[0.2em] uppercase bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 hidden sm:block">PROMPT STUDIO</span>
+                        <div className="hidden sm:flex flex-col">
+                            <span className="text-[12px] font-black tracking-[0.22em] uppercase gradient-heading leading-none">PROMPT STUDIO</span>
+                            <span className={`text-[8px] font-semibold tracking-widest ${state.isDark ? 'text-white/25' : 'text-slate-400'}`}>AI VISUAL ENGINE</span>
+                        </div>
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-1">
-                        {/* Language toggle */}
+                        {/* Language pill */}
                         <button
                             onClick={() => dispatch({ type: A.TOGGLE_LANGUAGE })}
-                            className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all border ${state.isDark ? 'bg-white/5 border-white/8 text-slate-300 hover:bg-white/10' : 'bg-white/80 border-black/8 text-slate-600 hover:bg-white'}`}
+                            className={`px-2.5 py-1 rounded-full text-[9px] font-black tracking-[0.15em] transition-all border ${state.isDark ? 'bg-violet-500/10 border-violet-500/20 text-violet-300 hover:bg-violet-500/20' : 'bg-violet-50 border-violet-200/60 text-violet-600 hover:bg-violet-100'}`}
                         >
                             {state.language === 'en' ? 'EN' : 'TR'}
                         </button>
 
                         {/* Icon buttons */}
                         {[
-                            { icon: Layers, title: 'Şablonlar', key: 'showPresetsModal' },
-                            { icon: History, title: 'Geçmiş', key: 'showHistoryModal' },
-                            { icon: Settings, title: 'Veritabanı', key: 'showAdminModal' },
-                            { icon: TerminalSquare, title: 'Dev Debugger', key: 'showDebugModal' },
+                            { icon: Layers,        title: 'Şablonlar',    key: 'showPresetsModal' },
+                            { icon: History,       title: 'Geçmiş',       key: 'showHistoryModal' },
+                            { icon: Settings,      title: 'Veritabanı',   key: 'showAdminModal' },
+                            { icon: TerminalSquare,title: 'Dev Debugger', key: 'showDebugModal' },
                         ].map(({ icon: Icon, title, key }) => (
                             <button
                                 key={key}
                                 onClick={() => dispatch({ type: A.SET_STATE, key, value: true })}
                                 title={title}
-                                className={`p-2 rounded-xl transition-all ${state.isDark ? 'text-slate-500 hover:text-violet-400 hover:bg-white/6' : 'text-slate-400 hover:text-violet-600 hover:bg-violet-50'}`}
+                                className={`p-1.5 rounded-lg transition-all ${state.isDark ? 'text-slate-500 hover:text-violet-400 hover:bg-violet-500/10' : 'text-slate-400 hover:text-violet-600 hover:bg-violet-50'}`}
                             >
-                                <Icon size={15} />
+                                <Icon size={14} />
                             </button>
                         ))}
 
-                        {/* Dark mode */}
+                        {/* Dark mode toggle */}
                         <button
                             role="switch"
                             aria-checked={state.isDark}
                             onClick={() => dispatch({ type: A.SET_STATE, key: 'isDark', value: !state.isDark })}
-                            className={`p-2 rounded-xl border transition-all ml-1 ${state.isDark ? 'bg-white/5 border-white/8 text-slate-400 hover:text-yellow-400 hover:bg-white/8' : 'bg-white border-black/8 text-slate-500 hover:text-violet-600 hover:bg-violet-50'}`}
+                            className={`ml-1 p-1.5 rounded-lg border transition-all ${state.isDark ? 'bg-white/5 border-white/8 text-slate-400 hover:text-amber-400 hover:bg-amber-400/10 hover:border-amber-400/20' : 'bg-white border-black/8 text-slate-400 hover:text-violet-600 hover:bg-violet-50 hover:border-violet-200'}`}
                         >
-                            {state.isDark ? <Sun size={15} /> : <Moon size={15} />}
+                            {state.isDark ? <Sun size={14} /> : <Moon size={14} />}
                         </button>
                     </div>
                 </div>
             </header>
 
             {!state.isDataLoaded ? (
-                <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full h-full">
+                <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full py-32 gap-8">
+                    {/* Concentric glow rings */}
                     <div className="relative flex items-center justify-center">
-                        <div className="absolute inset-0 rounded-full blur-2xl opacity-60 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 animate-pulse"></div>
-                        <div className={`relative flex items-center justify-center w-24 h-24 rounded-full shadow-2xl backdrop-blur-md ${state.isDark ? 'bg-black/40 border border-white/10' : 'bg-white/40 border border-white/40'}`}>
-                            <Loader2 size={36} className="text-indigo-500 animate-spin" />
+                        <div className="absolute w-40 h-40 rounded-full border border-violet-500/15 animate-ping" style={{ animationDuration: '2.5s' }} />
+                        <div className="absolute w-28 h-28 rounded-full border border-violet-500/20 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.3s' }} />
+                        <div className="absolute w-48 h-48 rounded-full bg-violet-600/8 blur-2xl animate-pulse" />
+                        <div className={`relative w-20 h-20 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(124,106,247,0.4)] border ${state.isDark ? 'bg-[#07071a] border-violet-500/30' : 'bg-white/80 border-violet-300/40'}`}>
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500/10 to-cyan-500/10" />
+                            <Loader2 size={32} className="text-violet-500 animate-spin relative z-10" />
                         </div>
                     </div>
-                    <h2 className="mt-8 text-xl font-bold tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Stüdyo Hazırlanıyor</h2>
-                    <p className={`mt-2 text-sm font-semibold tracking-wide animate-pulse ${state.isDark ? 'text-slate-400' : 'text-slate-500'}`}>Kategoriler ve AI Ayarları Yükleniyor...</p>
+                    <div className="flex flex-col items-center gap-2">
+                        <h2 className="text-lg font-black tracking-[0.2em] uppercase gradient-heading">Stüdyo Hazırlanıyor</h2>
+                        <p className={`text-xs font-semibold tracking-widest uppercase animate-pulse ${state.isDark ? 'text-white/25' : 'text-slate-400'}`}>Kategoriler ve AI Ayarları Yükleniyor</p>
+                    </div>
+                    {/* Meteor bar */}
+                    <div className={`w-48 h-0.5 rounded-full overflow-hidden relative ${state.isDark ? 'bg-white/5' : 'bg-black/5'}`}>
+                        <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-transparent via-violet-500 to-transparent animate-[shimmer_1.4s_ease-in-out_infinite]" />
+                    </div>
                 </div>
             ) : (
                 <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:px-8 lg:py-8 flex flex-col gap-6 relative z-10 min-h-0">
