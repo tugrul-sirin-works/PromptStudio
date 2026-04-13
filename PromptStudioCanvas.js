@@ -69,16 +69,22 @@ const CONFLICT_RULES = [
 // =============================================================================
 
 const DEMO_CATEGORIES = [
-    { category_id: 'subject',          group_name_tr: 'TEMEL',        group_name_en: 'CORE',       title_tr: 'Konu & Özne',        title_en: 'Subject',           icon_name: 'Focus',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 1,  target_output: 'Visual' },
-    { category_id: 'lighting',         group_name_tr: 'TEMEL',        group_name_en: 'CORE',       title_tr: 'Işık & Atmosfer',    title_en: 'Lighting',          icon_name: 'Sun',           show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 2,  target_output: 'Visual' },
-    { category_id: 'camera_style',     group_name_tr: 'SİNEMATİK',   group_name_en: 'CINEMATIC',  title_tr: 'Kamera & Çekim',     title_en: 'Camera Style',      icon_name: 'Camera',        show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 3,  target_output: 'Visual' },
-    { category_id: 'composition',      group_name_tr: 'SİNEMATİK',   group_name_en: 'CINEMATIC',  title_tr: 'Kompozisyon',        title_en: 'Composition',       icon_name: 'LayoutTemplate', show_for: 'image,video,img2vid', is_meta: false, is_active: true, order_index: 4,  target_output: 'Visual' },
-    { category_id: 'mood',             group_name_tr: 'DUYGU',        group_name_en: 'EMOTION',    title_tr: 'Duygu & Hava',       title_en: 'Mood',              icon_name: 'Heart',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 5,  target_output: 'Visual' },
-    { category_id: 'color_palette',    group_name_tr: 'DUYGU',        group_name_en: 'EMOTION',    title_tr: 'Renk Paleti',        title_en: 'Color Palette',     icon_name: 'Palette',       show_for: 'image,video',         is_meta: false, is_active: true,  order_index: 6,  target_output: 'Visual' },
-    { category_id: 'art_style',        group_name_tr: 'STIL',         group_name_en: 'STYLE',      title_tr: 'Sanat & Render',     title_en: 'Art Style',         icon_name: 'Paintbrush',    show_for: 'image',               is_meta: false, is_active: true,  order_index: 7,  target_output: 'Visual' },
-    { category_id: 'negative_prompt',  group_name_tr: 'KONTROL',      group_name_en: 'CONTROL',    title_tr: 'Negatif Prompt',     title_en: 'Negative Prompt',   icon_name: 'ShieldAlert',   show_for: 'image,video,img2vid', is_meta: true,  is_active: true,  order_index: 8,  target_output: 'Visual' },
-    { category_id: 'copy_tone',        group_name_tr: 'PAZARLAMA',    group_name_en: 'MARKETING',  title_tr: 'Kopya Tonu',         title_en: 'Copy Tone',         icon_name: 'Megaphone',     show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 9,  target_output: 'Text' },
-    { category_id: 'target_audience',  group_name_tr: 'PAZARLAMA',    group_name_en: 'MARKETING',  title_tr: 'Hedef Kitle',        title_en: 'Target Audience',   icon_name: 'Users',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 10, target_output: 'Text' },
+    // ── GÖRSEL KATEGORİLERİ ──────────────────────────────────────────────────
+    { category_id: 'subject',          group_name_tr: 'TEMEL',            group_name_en: 'CORE',         title_tr: 'Konu & Özne',           title_en: 'Subject',             icon_name: 'Focus',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 1,  target_output: 'Visual', description_tr: 'Görselin odak noktasını ve ana konusunu belirler.',     manual_tip_tr: 'Ana konuyu veya özneyi tanımlayın.' },
+    { category_id: 'lighting',         group_name_tr: 'TEMEL',            group_name_en: 'CORE',         title_tr: 'Işık & Atmosfer',       title_en: 'Lighting',            icon_name: 'Sun',           show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 2,  target_output: 'Visual', description_tr: 'Işık kaynağı ve yönüyle sahnenin dramatik tonunu inşa eder.', manual_tip_tr: 'Işık tipini veya stilini belirtin.' },
+    { category_id: 'camera_style',     group_name_tr: 'SİNEMATİK',       group_name_en: 'CINEMATIC',    title_tr: 'Kamera & Çekim',        title_en: 'Camera Style',        icon_name: 'Camera',        show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 3,  target_output: 'Visual', description_tr: 'Kamera açısı ve çekim türünü kontrol eder.',             manual_tip_tr: 'Kamera tipini veya çekim açısını yazın.' },
+    { category_id: 'composition',      group_name_tr: 'SİNEMATİK',       group_name_en: 'CINEMATIC',    title_tr: 'Kompozisyon',           title_en: 'Composition',         icon_name: 'LayoutTemplate',show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 4,  target_output: 'Visual', description_tr: 'Öznenin kadrajdaki yerini belirleyen kurallar.',         manual_tip_tr: 'Kompozisyon kuralını veya çerçevelemeyi yazın.' },
+    { category_id: 'mood',             group_name_tr: 'DUYGU',            group_name_en: 'EMOTION',      title_tr: 'Duygu & Hava',          title_en: 'Mood',                icon_name: 'Heart',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 5,  target_output: 'Visual', description_tr: 'Sahnenin duygusal derinliğini ve atmosferini tanımlar.', manual_tip_tr: 'Sahnenin duygusal tonunu yazın.' },
+    { category_id: 'color_palette',    group_name_tr: 'DUYGU',            group_name_en: 'EMOTION',      title_tr: 'Renk Paleti',           title_en: 'Color Palette',       icon_name: 'Palette',       show_for: 'image,video',         is_meta: false, is_active: true,  order_index: 6,  target_output: 'Visual', description_tr: 'Görseldeki renk uyumunu ve doygunluğu kontrol eder.',   manual_tip_tr: 'Baskın renkleri veya palet adını yazın.' },
+    { category_id: 'art_style',        group_name_tr: 'STİL',             group_name_en: 'STYLE',        title_tr: 'Sanat & Render',        title_en: 'Art Style',           icon_name: 'Paintbrush',    show_for: 'image',               is_meta: false, is_active: true,  order_index: 7,  target_output: 'Visual', description_tr: 'Görselin sanatsal dilini ve render tekniğini belirler.', manual_tip_tr: 'Sanat akımı veya render motorunu yazın.' },
+    { category_id: 'negative_prompt',  group_name_tr: 'KONTROL',          group_name_en: 'CONTROL',      title_tr: 'Negatif Komut',         title_en: 'Negative Prompt',     icon_name: 'ShieldAlert',   show_for: 'image,video,img2vid', is_meta: true,  is_active: true,  order_index: 8,  target_output: 'Visual', description_tr: 'İstenmeyen unsurları filtreleyerek kaliteyi artırır.',   manual_tip_tr: 'İstemediğiniz unsurları virgülle ayırarak yazın.' },
+    // ── PAZARLAMA KATEGORİLERİ ───────────────────────────────────────────────
+    { category_id: 'brand_voice',      group_name_tr: 'MARKA ALT YAPISI', group_name_en: 'BRAND FOUNDATION', title_tr: 'Marka Sesi',       title_en: 'Brand Voice',         icon_name: 'Megaphone',     show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 9,  target_output: 'Both',   description_tr: 'Markanızın iletişim tonu ve kişiliğini belirler. Görsel kompozisyonu ve reklam metninin dilini doğrudan etkiler.', manual_tip_tr: 'Markanızın nasıl konuşmasını istediğinizi yazın.' },
+    { category_id: 'target_persona',   group_name_tr: 'MARKA ALT YAPISI', group_name_en: 'BRAND FOUNDATION', title_tr: 'Hedef Persona',    title_en: 'Target Persona',      icon_name: 'Users',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 10, target_output: 'Both',   description_tr: 'Hedef kitlenizin demografik ve psikografik profili. Karakterlerin giyimini, ifadesini ve metnin hitap şeklini belirler.', manual_tip_tr: 'Hedef kitlenizi kısaca tanımlayın (yaş, ilgi, motivasyon).' },
+    { category_id: 'emotional_trigger',group_name_tr: 'İKNA MEKANİZMASI', group_name_en: 'PERSUASION',   title_tr: 'Duygusal Tetikleyici',  title_en: 'Emotional Trigger',   icon_name: 'Heart',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 11, target_output: 'Both',   description_tr: 'İzleyicide uyandırmak istediğiniz ilk psikolojik his. Satın alma kararlarını yönlendiren duygusal güdü.', manual_tip_tr: 'Uyandırmak istediğiniz duyguyu veya psikolojik etkiyi yazın.' },
+    { category_id: 'marketing_angle',  group_name_tr: 'İKNA MEKANİZMASI', group_name_en: 'PERSUASION',   title_tr: 'Pazarlama Açısı',       title_en: 'Marketing Angle',     icon_name: 'TrendingUp',    show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 12, target_output: 'Both',   description_tr: 'Ürünün hangi yönünün vurgulanacağını belirler. Reklam metninin odak noktasını oluşturur.', manual_tip_tr: 'Reklamın odaklanacağı faydayı veya açıyı yazın.' },
+    { category_id: 'visual_hook',      group_name_tr: 'İKNA MEKANİZMASI', group_name_en: 'PERSUASION',   title_tr: 'Görsel Çengel',         title_en: 'Visual Hook',         icon_name: 'Eye',           show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 13, target_output: 'Both',   description_tr: 'Sosyal medyada akışı durduran ve dikkat çeken ana görsel odak noktası.', manual_tip_tr: 'Dikkat çekecek görsel elementi veya anı tanımlayın.' },
+    { category_id: 'awareness_level',  group_name_tr: 'KANAL STRATEJİSİ', group_name_en: 'CHANNEL',      title_tr: 'Farkındalık Seviyesi',  title_en: 'Awareness Level',     icon_name: 'BarChart',      show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 14, target_output: 'Both',   description_tr: 'Hedef kitlenin ürünü ne kadar tanıdığını belirler. Metnin bilgi yoğunluğunu ve teklif yapısını ayarlar.', manual_tip_tr: "Müşterinizin ürünü ne kadar tanıdığını belirtin." },
 ];
 
 const DEMO_ITEMS = [
@@ -121,14 +127,44 @@ const DEMO_ITEMS = [
     { item_id: 'neg_blur',       category_id: 'negative_prompt', label_tr: 'Bulanık / Bozuk',     label_en: 'Blur / Distorted',     trigger_text: 'blurry, out of focus, distorted, deformed, ugly, low quality',          meaning_tr: 'Kalitesiz ve bozuk görüntü unsurları',       is_default: true,  sort_priority: 1 },
     { item_id: 'neg_watermark',  category_id: 'negative_prompt', label_tr: 'Filigran / Metin',    label_en: 'Watermark',            trigger_text: 'watermark, text overlay, logo, signature, copyright',                   meaning_tr: 'Filigran ve metin içeren unsurlar',          is_default: true,  sort_priority: 2 },
     { item_id: 'neg_anatomy',    category_id: 'negative_prompt', label_tr: 'Bozuk Anatomi',       label_en: 'Bad Anatomy',          trigger_text: 'bad anatomy, extra limbs, mutated hands, malformed fingers',             meaning_tr: 'Bozuk insan anatomisi unsurları',            is_default: false, sort_priority: 3 },
-    // copy_tone (marketing)
-    { item_id: 'copy_bold',      category_id: 'copy_tone',       label_tr: 'Cesur & Güçlü',       label_en: 'Bold & Strong',        trigger_text: 'bold, impactful, authoritative, confident brand voice',                  meaning_tr: 'Cesur ve güçlü marka sesi',                  is_default: true,  sort_priority: 1 },
-    { item_id: 'copy_friendly',  category_id: 'copy_tone',       label_tr: 'Samimi & Sıcak',      label_en: 'Friendly & Warm',      trigger_text: 'friendly, approachable, warm, conversational tone',                     meaning_tr: 'Samimi ve sıcak konuşma tonu',               is_default: false, sort_priority: 2 },
-    { item_id: 'copy_luxury',    category_id: 'copy_tone',       label_tr: 'Lüks & Prestijli',    label_en: 'Luxury',               trigger_text: 'luxurious, premium, sophisticated, exclusive brand voice',               meaning_tr: 'Prestijli lüks marka sesi',                  is_default: false, sort_priority: 3 },
-    // target_audience (marketing)
-    { item_id: 'aud_gen_z',      category_id: 'target_audience', label_tr: 'Gen Z (18-26)',        label_en: 'Gen Z',                trigger_text: 'targeting Gen Z, digital natives, trend-conscious, social-first',        meaning_tr: '18-26 yaş, dijital nesil',                   is_default: true,  sort_priority: 1 },
-    { item_id: 'aud_millennial', category_id: 'target_audience', label_tr: 'Millennial (27-42)',   label_en: 'Millennials',          trigger_text: 'targeting Millennials, value-conscious, experience-driven consumers',   meaning_tr: '27-42 yaş deneyim odaklı tüketiciler',      is_default: false, sort_priority: 2 },
-    { item_id: 'aud_premium',    category_id: 'target_audience', label_tr: 'Premium Segment',      label_en: 'Premium',              trigger_text: 'targeting premium consumers, high income, quality-focused, discerning',  meaning_tr: 'Yüksek gelirli, kalite odaklı segment',     is_default: false, sort_priority: 3 },
+    // ── PAZARLAMA İTEMLERI ───────────────────────────────────────────────────
+    // brand_voice
+    { item_id: 'bv_luxury',       category_id: 'brand_voice',       badge_tr: 'Lüks',        label_tr: 'Lüks & Prestijli',       label_en: 'Luxury & Prestige',    trigger_text: 'luxurious, premium, sophisticated, exclusive, refined brand voice, minimal wording', meaning_tr: 'Prestijli, mesafeli ve sofistike marka dili', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'bv_friendly',     category_id: 'brand_voice',       badge_tr: 'Samimi',      label_tr: 'Samimi & Güvenilir',     label_en: 'Friendly & Warm',      trigger_text: 'friendly, trustworthy, authentic, approachable, community-focused conversational voice', meaning_tr: 'Sıcak ve güven veren samimi iletişim tonu', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'bv_bold',         category_id: 'brand_voice',       badge_tr: 'Cesur',       label_tr: 'Cesur & Güçlü',         label_en: 'Bold & Powerful',      trigger_text: 'bold, assertive, powerful, confident, direct, impactful, no-nonsense communication', meaning_tr: 'Güçlü ve etkili cesur marka sesi', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'bv_playful',      category_id: 'brand_voice',       badge_tr: 'Eğlenceli',   label_tr: 'Eğlenceli & Genç',      label_en: 'Playful & Youthful',   trigger_text: 'playful, youthful, trendy, fun, energetic, vibrant, irreverent brand personality', meaning_tr: 'Dinamik ve enerjik genç marka kişiliği', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'bv_pro',          category_id: 'brand_voice',       badge_tr: 'Kurumsal',    label_tr: 'Profesyonel & Kurumsal', label_en: 'Professional',         trigger_text: 'professional, authoritative, corporate, credible, expert, data-driven brand positioning', meaning_tr: 'Kurumsal ve otoriter profesyonel ton', is_default: false, sort_priority: 5, is_system: true },
+    // target_persona
+    { item_id: 'tp_genz',         category_id: 'target_persona',    badge_tr: 'Gen Z',       label_tr: 'Gen Z (18-25)',          label_en: 'Gen Z',                trigger_text: 'targeting Gen Z, digital natives, TikTok-first, authenticity-driven, value-conscious, short attention span', meaning_tr: '18-25 yaş dijital nesil, özgünlük odaklı', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'tp_millennial',   category_id: 'target_persona',    badge_tr: 'Millennial',  label_tr: 'Millennial (26-40)',     label_en: 'Millennials',          trigger_text: 'targeting Millennials, experience-driven, brand story seekers, work-life balance, quality conscious', meaning_tr: '26-40 yaş deneyim odaklı tüketiciler', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'tp_genx',         category_id: 'target_persona',    badge_tr: 'Gen X',       label_tr: 'X Kuşağı (41-55)',      label_en: 'Gen X',                trigger_text: 'targeting Gen X, brand-loyal, quality-focused, practical benefits, reliability, proven results', meaning_tr: '41-55 yaş markaya sadık kaliteci kitle', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'tp_premium',      category_id: 'target_persona',    badge_tr: 'Premium',     label_tr: 'Premium Segment',        label_en: 'Premium Consumers',    trigger_text: 'targeting premium consumers, high income, quality-conscious, aspirational lifestyle, status-driven', meaning_tr: 'Yüksek gelirli, kalite ve statü odaklı', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'tp_b2b',          category_id: 'target_persona',    badge_tr: 'B2B',         label_tr: 'B2B Karar Verici',      label_en: 'B2B Decision Maker',   trigger_text: 'targeting B2B decision makers, ROI-focused, analytical, solution-oriented buyers, efficiency-driven', meaning_tr: 'Kurumsal karar vericiler, ROI odaklı', is_default: false, sort_priority: 5, is_system: true },
+    // emotional_trigger
+    { item_id: 'et_urgency',      category_id: 'emotional_trigger', badge_tr: 'Aciliyet',    label_tr: 'Aciliyet & Kıtlık',     label_en: 'Urgency & Scarcity',   trigger_text: 'urgency, scarcity, limited time offer, FOMO, act now messaging, countdown pressure', meaning_tr: 'Acele etme ve kaçırma korkusu (FOMO)', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'et_trust',        category_id: 'emotional_trigger', badge_tr: 'Güven',       label_tr: 'Güven & Sosyal Kanıt',  label_en: 'Trust & Proof',        trigger_text: 'social proof, trust signals, testimonials, credibility, verified results, community validation', meaning_tr: 'Güven inşası ve sosyal onay mekanizması', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'et_status',       category_id: 'emotional_trigger', badge_tr: 'Statü',       label_tr: 'Statü & Prestij',       label_en: 'Status & Prestige',    trigger_text: 'status, exclusivity, prestige, aspirational lifestyle, elite belonging, achievement', meaning_tr: 'Statü kazanma ve prestijli yaşam arzusu', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'et_curiosity',    category_id: 'emotional_trigger', badge_tr: 'Merak',       label_tr: 'Merak & Keşif',         label_en: 'Curiosity',            trigger_text: 'curiosity gap, intriguing question, mystery, discovery, reveal moment, open loop', meaning_tr: 'Merak uyandıran soru ve keşif hissi', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'et_nostalgia',    category_id: 'emotional_trigger', badge_tr: 'Nostalji',    label_tr: 'Nostalji & Aidiyet',    label_en: 'Nostalgia',            trigger_text: 'nostalgia, comfort, familiarity, belonging, shared memories, community warmth', meaning_tr: 'Geçmişe bağlılık ve aidiyet hissi', is_default: false, sort_priority: 5, is_system: true },
+    // marketing_angle
+    { item_id: 'ma_problem',      category_id: 'marketing_angle',  badge_tr: 'Problem',     label_tr: 'Problem & Çözüm',       label_en: 'Problem-Solution',     trigger_text: 'problem-solution narrative, pain point identification, fix messaging, before-after framing', meaning_tr: 'Sorunu tanımla ve çözümü sun', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'ma_benefit',      category_id: 'marketing_angle',  badge_tr: 'Fayda',       label_tr: 'Fayda Odaklı',          label_en: 'Benefit-Led',          trigger_text: 'benefits-led, functional advantages, results-focused, value proposition, outcomes emphasized', meaning_tr: 'Ürünün somut faydalarını ön plana çıkar', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'ma_social',       category_id: 'marketing_angle',  badge_tr: 'Sosyal Kanıt', label_tr: 'Sosyal Kanıt',         label_en: 'Social Proof',         trigger_text: 'testimonials, user reviews, case studies, social proof, success stories, real results', meaning_tr: 'Müşteri deneyimleri ve başarı hikayeleri', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'ma_emotional',    category_id: 'marketing_angle',  badge_tr: 'Duygusal',    label_tr: 'Duygusal Hikaye',       label_en: 'Emotional Story',      trigger_text: 'emotional storytelling, identity-driven, values alignment, brand narrative, human connection', meaning_tr: 'Duygusal bağ ve kimlik odaklı anlatı', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'ma_authority',    category_id: 'marketing_angle',  badge_tr: 'Otorite',     label_tr: 'Otorite & Uzmanlık',    label_en: 'Authority',            trigger_text: 'authority positioning, expertise, thought leadership, credibility signals, expert endorsement', meaning_tr: 'Uzman konumlandırması ve otorite inşası', is_default: false, sort_priority: 5, is_system: true },
+    { item_id: 'ma_comparison',   category_id: 'marketing_angle',  badge_tr: 'Dönüşüm',    label_tr: 'Önce-Sonra',            label_en: 'Before-After',         trigger_text: 'before-after transformation, competitive positioning, comparison, contrast reveal, dramatic change', meaning_tr: 'Dönüşüm ve karşılaştırmalı anlatı', is_default: false, sort_priority: 6, is_system: true },
+    // visual_hook
+    { item_id: 'vh_scroll',       category_id: 'visual_hook',       badge_tr: 'Dur-Bak',     label_tr: 'Dur-Bak Anı',           label_en: 'Scroll Stopper',       trigger_text: 'scroll-stopping visual, unexpected element, pattern interrupt, surprise composition, thumb-stopping', meaning_tr: 'Sosyal medya akışını durduran sürpriz görsel', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'vh_hero',         category_id: 'visual_hook',       badge_tr: 'Hero',        label_tr: 'Ürün Hero Çekim',       label_en: 'Product Hero',         trigger_text: 'hero product close-up, texture detail, macro beauty shot, product isolation, luxury packaging', meaning_tr: 'Ürünü ön plana alan etkileyici çekim', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'vh_lifestyle',    category_id: 'visual_hook',       badge_tr: 'Yaşam',       label_tr: 'Yaşam Tarzı',           label_en: 'Lifestyle',            trigger_text: 'person interacting with product, lifestyle in use, authentic usage moment, real life context', meaning_tr: 'Gerçek kullanım anını gösteren yaşam tarzı', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'vh_transform',    category_id: 'visual_hook',       badge_tr: 'Dönüşüm',    label_tr: 'Önce-Sonra Görseli',   label_en: 'Before-After',         trigger_text: 'before-after split composition, transformation reveal, dramatic contrast, side by side comparison', meaning_tr: 'Dönüşümü gösteren karşılaştırmalı görsel', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'vh_data',         category_id: 'visual_hook',       badge_tr: 'Veri',        label_tr: 'Veri & Sayı Vurgusu',  label_en: 'Data Visual',          trigger_text: 'bold number overlay, stat reveal, data visualization, key metric emphasis, percentage highlight', meaning_tr: 'İkna edici veri ve istatistik görseli', is_default: false, sort_priority: 5, is_system: true },
+    // awareness_level
+    { item_id: 'al_cold',         category_id: 'awareness_level',   badge_tr: 'Soğuk',       label_tr: 'Soğuk Kitle',           label_en: 'Cold Audience',        trigger_text: 'cold audience, problem unaware, educational first approach, top of funnel, awareness stage', meaning_tr: 'Ürünü hiç duymamış, eğitim önce gelir', is_default: true,  sort_priority: 1, is_system: true },
+    { item_id: 'al_aware',        category_id: 'awareness_level',   badge_tr: 'Farkındalık', label_tr: 'Farkındalık Aşaması',   label_en: 'Problem Aware',        trigger_text: 'problem aware, seeking solutions, informational content, consideration stage, comparison seeking', meaning_tr: 'Problemi biliyor ama çözüm arıyor', is_default: false, sort_priority: 2, is_system: true },
+    { item_id: 'al_warm',         category_id: 'awareness_level',   badge_tr: 'Sıcak',       label_tr: 'Değerlendirme Aşaması', label_en: 'Solution Aware',       trigger_text: 'solution aware, comparing options, middle of funnel, decision making, feature comparison', meaning_tr: 'Çözümleri karşılaştıran değerlendirici', is_default: false, sort_priority: 3, is_system: true },
+    { item_id: 'al_hot',          category_id: 'awareness_level',   badge_tr: 'Satın Al',    label_tr: 'Satın Almaya Hazır',    label_en: 'Purchase Ready',       trigger_text: 'hot audience, purchase intent, bottom of funnel, offer focused, conversion, CTA-driven', meaning_tr: 'Satın almaya hazır, güçlü CTA gerek', is_default: false, sort_priority: 4, is_system: true },
+    { item_id: 'al_existing',     category_id: 'awareness_level',   badge_tr: 'Sadık',       label_tr: 'Mevcut Müşteri',        label_en: 'Existing Customer',    trigger_text: 'existing customers, retention marketing, upsell, loyalty program, re-engagement, referral', meaning_tr: 'Mevcut müşteri — sadakat ve upsell', is_default: false, sort_priority: 5, is_system: true },
 ];
 
 const DEMO_PRODUCTS = [
@@ -737,19 +773,18 @@ const CategoryItemCard = ({ item, isSelected, isMultiSelect, isDark, onSelect, o
                     </div>
                 )}
 
-                {/* Edit manual button (hover only) */}
-                {!isMultiSelect && (
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onEditManual(); }}
-                        className={`absolute bottom-3.5 right-3.5 z-20 p-1.5 rounded-lg border opacity-0 group-hover:opacity-100 transition-all duration-200 ${
-                            isDark
-                                ? 'bg-white/8 border-white/10 text-slate-300 hover:text-violet-400 hover:border-violet-500/30'
-                                : 'bg-white border-slate-200/80 text-slate-400 hover:text-violet-600 hover:border-violet-200'
-                        } backdrop-blur-md shadow-sm`}
-                    >
-                        <Edit2 size={11} />
-                    </button>
-                )}
+                {/* Edit button (hover only) — system items show a greyed locked state */}
+                <button
+                    onClick={(e) => { e.stopPropagation(); onEditManual(); }}
+                    title={item.isSystem ? 'Sistem kaydı — kopyalayarak özelleştirebilirsiniz' : 'Düzenle'}
+                    className={`absolute bottom-3.5 right-3.5 z-20 p-1.5 rounded-lg border opacity-0 group-hover:opacity-100 transition-all duration-200 ${
+                        isDark
+                            ? 'bg-white/8 border-white/10 text-slate-300 hover:text-violet-400 hover:border-violet-500/30'
+                            : 'bg-white border-slate-200/80 text-slate-400 hover:text-violet-600 hover:border-violet-200'
+                    } backdrop-blur-md shadow-sm`}
+                >
+                    <Edit2 size={11} />
+                </button>
             </div>
         </div>
     );
@@ -926,6 +961,120 @@ const ManualInputArea = ({ isDark, value, onChange, onTranslate, isTranslating }
                     value={value} onChange={onChange} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onTranslate(); } }}
                     className="w-full p-4 text-sm font-medium resize-none h-24 outline-none bg-transparent custom-scrollbar" placeholder="Fikriniz..."
                 />
+            </div>
+        </div>
+    );
+};
+
+// ─── Item Edit / Add Modal ────────────────────────────────────────────────────
+const ItemEditModal = ({ open, onClose, isDark, item, categoryId, isNew, onSave }) => {
+    const empty = { label_tr: '', trigger_text: '', meaning_tr: '', badge_tr: '', image_url: '', video_url: '' };
+    const [form, setForm] = useState(empty);
+    const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            if (item && !isNew) {
+                setForm({
+                    label_tr: item.label_tr || item.label || '',
+                    trigger_text: item.trigger || '',
+                    meaning_tr: item.meaning_tr || item.meaning || '',
+                    badge_tr: item.badge_tr || item.badge || '',
+                    image_url: item.image || '',
+                    video_url: item.video || '',
+                });
+            } else {
+                setForm(empty);
+            }
+        }
+    }, [open, item, isNew]);
+
+    if (!open) return null;
+
+    const fields = [
+        { key: 'label_tr',     label: 'Başlık (Türkçe)',      type: 'input',    placeholder: 'Örn: Altın Saat Işığı',                required: true },
+        { key: 'trigger_text', label: 'Trigger (İngilizce)', type: 'textarea', placeholder: 'Örn: golden hour lighting, warm sunlight', required: true },
+        { key: 'meaning_tr',   label: 'Anlam / Açıklama',     type: 'input',    placeholder: 'Kısa Türkçe açıklama',                   required: false },
+        { key: 'badge_tr',     label: 'Badge Etiketi',         type: 'input',    placeholder: 'Örn: Altın Saat',                        required: false },
+        { key: 'image_url',    label: 'Görsel URL',            type: 'input',    placeholder: 'https://...',                            required: false },
+        { key: 'video_url',    label: 'Video URL',             type: 'input',    placeholder: 'https://...',                            required: false },
+    ];
+
+    const handleSave = async () => {
+        if (!form.label_tr?.trim() || !form.trigger_text?.trim()) return;
+        setIsSaving(true);
+        const payload = {
+            ...form,
+            category_id: categoryId,
+            item_id: isNew ? `item_${Date.now()}_${Math.random().toString(36).slice(2,6)}` : (item?.id || item?.item_id),
+            is_default: false,
+            sort_priority: 99,
+            is_system: false,
+        };
+        await onSave(isNew ? 'CREATE_RECORD' : 'update_row', 'items', isNew ? payload : [payload]);
+        setIsSaving(false);
+        onClose();
+    };
+
+    return (
+        <div className="fixed inset-0 z-[350] bg-black/70 backdrop-blur-md animate-in fade-in flex items-center justify-center p-4" onClick={onClose}>
+            <div
+                className={`w-full max-w-lg rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 ${isDark ? 'bg-neutral-900 border border-white/10' : 'bg-white border border-slate-200'}`}
+                onClick={e => e.stopPropagation()}
+            >
+                {/* Header */}
+                <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-white/8' : 'border-slate-100'}`}>
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-indigo-500 flex items-center justify-center">
+                            {isNew ? <Plus size={16} className="text-white" /> : <Edit2 size={14} className="text-white" />}
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-widest text-indigo-500">{isNew ? 'Yeni Seçenek Ekle' : 'Seçenek Düzenle'}</h3>
+                            <p className={`text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-400'}`}>Tüm alanlar kaydedilir</p>
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white transition-all hover:bg-slate-100 dark:hover:bg-white/10"><X size={18} /></button>
+                </div>
+
+                {/* Fields */}
+                <div className="p-6 flex flex-col gap-4 overflow-y-auto custom-scrollbar max-h-[70vh]">
+                    {fields.map(f => (
+                        <div key={f.key} className="flex flex-col gap-1.5">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                                {f.label} {f.required && <span className="text-rose-500">*</span>}
+                            </label>
+                            {f.type === 'textarea' ? (
+                                <textarea
+                                    value={form[f.key] || ''}
+                                    onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                                    placeholder={f.placeholder}
+                                    className={`w-full px-3 py-2.5 rounded-xl text-sm font-medium resize-none h-24 outline-none border transition-all custom-scrollbar ${isDark ? 'bg-white/5 border-white/10 text-white placeholder-white/20 focus:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-300 focus:border-indigo-400 focus:bg-white'}`}
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={form[f.key] || ''}
+                                    onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                                    placeholder={f.placeholder}
+                                    className={`w-full px-3 py-2.5 rounded-xl text-sm font-medium outline-none border transition-all ${isDark ? 'bg-white/5 border-white/10 text-white placeholder-white/20 focus:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-300 focus:border-indigo-400 focus:bg-white'}`}
+                                />
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Footer */}
+                <div className={`flex items-center justify-end gap-3 px-6 py-4 border-t ${isDark ? 'border-white/8 bg-white/2' : 'border-slate-100 bg-slate-50/50'}`}>
+                    <button onClick={onClose} className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-white/5' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}`}>İptal</button>
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving || !form.label_tr?.trim() || !form.trigger_text?.trim()}
+                        className="flex items-center gap-2 px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md shadow-indigo-500/30"
+                    >
+                        {isSaving ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} strokeWidth={3} />}
+                        {isNew ? 'Ekle' : 'Kaydet'}
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -1554,6 +1703,9 @@ const App = () => {
     } = usePromptManager();
 
     const [showExpandModal, setShowExpandModal] = useState(false);
+    const [itemEditState, setItemEditState] = useState({ open: false, item: null, isNew: false });
+    const openItemEdit = (item, isNew = false) => setItemEditState({ open: true, item, isNew });
+    const closeItemEdit = () => setItemEditState({ open: false, item: null, isNew: false });
     const [draggedCat, setDraggedCat] = useState(null);
     const draggedCatRef = useRef(null);
     const [copiedVisual, setCopiedVisual] = useState(false);
@@ -1983,11 +2135,11 @@ const App = () => {
                                 )}
                                 {availableCategories.find(c => c.id === state.activeCategoryTab) && (
                                     <button
-                                        onClick={() => dispatch((s) => ({ type: A.SET_STATE, key: 'isManualOpen', value: { ...s.isManualOpen, [state.activeCategoryTab]: !s.isManualOpen[state.activeCategoryTab] } }))}
-                                        className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${state.isManualOpen[state.activeCategoryTab] ? UI_STYLES.button.primary : UI_STYLES.button.outline}`}
+                                        onClick={() => openItemEdit(null, true)}
+                                        className={`${UI_STYLES.button.base} ${UI_STYLES.button.sm} ${UI_STYLES.button.outline}`}
                                     >
-                                        {state.isManualOpen[state.activeCategoryTab] ? <X size={12} /> : <Plus size={12} />}
-                                        <span className="hidden md:inline">{state.isManualOpen[state.activeCategoryTab] ? 'Kapat' : 'Özel Ekle'}</span>
+                                        <Plus size={12} />
+                                        <span className="hidden md:inline">Ekle</span>
                                     </button>
                                 )}
                             </div>
@@ -2069,7 +2221,7 @@ const App = () => {
                                                             const currentSel = state.selections[state.activeFormat]?.[state.activeCategoryTab];
                                                             const isMultiSelect = state.activeCategoryTab === 'negative_prompt';
                                                             const isSelected = isMultiSelect ? Array.isArray(currentSel) && currentSel.includes(item.id) : currentSel === item.id;
-                                                            return <CategoryItemCard key={item.id} item={item} isSelected={isSelected} isMultiSelect={isMultiSelect} isDark={state.isDark} onSelect={() => handleSelection(state.activeCategoryTab, item.id)} onEditManual={() => { dispatch({ type: A.SET_STATE, key: 'customInput', value: item.meaning || item.label }); dispatch((s) => ({ type: A.SET_STATE, key: 'isManualOpen', value: { ...s.isManualOpen, [state.activeCategoryTab]: true } })); }} />;
+                                                            return <CategoryItemCard key={item.id} item={item} isSelected={isSelected} isMultiSelect={isMultiSelect} isDark={state.isDark} onSelect={() => handleSelection(state.activeCategoryTab, item.id)} onEditManual={() => openItemEdit(item, false)} />;
                                                         })}
                                                     </div>
                                                 </div>
@@ -2195,6 +2347,7 @@ const App = () => {
             <ExpandSceneModal open={showExpandModal} onClose={() => setShowExpandModal(false)} isDark={state.isDark} product={state.product} description={state.description} onProductChange={v => dispatch({ type: A.UPDATE_INPUT, field: 'product', value: v })} onDescriptionChange={e => { dispatch({ type: A.UPDATE_INPUT, field: 'description', value: e.target.value }); }} onEnhance={() => handleEnhanceScene()} isEnhancingScene={state.isEnhancingScene} />
             <DebugPayloadModal open={state.showDebugModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showDebugModal', value: false })} debugPayload={state.debugPayload} />
             <AdminModal open={state.showAdminModal && !!state.tableHeaders} onClose={() => dispatch({ type: A.SET_STATE, key: 'showAdminModal', value: false })} isDark={state.isDark} tableHeaders={state.tableHeaders} onSave={syncToDatabase} />
+            <ItemEditModal open={itemEditState.open} onClose={closeItemEdit} isDark={state.isDark} item={itemEditState.item} categoryId={state.activeCategoryTab} isNew={itemEditState.isNew} onSave={syncToDatabase} />
             <VariationsModal open={state.showVariationsModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showVariationsModal', value: false })} isDark={state.isDark} variations={state.variations} onCopy={(txt) => handleCopyGlobal(txt, () => showToast("Varyasyon panoya kopyalandı!"))} />
             <PresetsModal open={state.showPresetsModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showPresetsModal', value: false })} isDark={state.isDark} presets={state.presets} onRestore={(snapshot) => dispatch({ type: A.INITIALIZE, payload: snapshot })} />
             <HistoryModal open={state.showHistoryModal} onClose={() => dispatch({ type: A.SET_STATE, key: 'showHistoryModal', value: false })} isDark={state.isDark} history={state.history} onRestore={(snapshot) => dispatch({ type: A.INITIALIZE, payload: snapshot })} />
