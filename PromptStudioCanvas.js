@@ -1082,13 +1082,18 @@ const usePromptManager = () => {
                 return;
             }
             try {
-                // Supabase JS client sorguları hata atmaz, { data, error } döner. O yüzden the promise.catch kullanılamaz.
+                // Supabase JS client sorguları hata atmaz, { data, error } döner.
+                const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase bağlantısı zaman aşımına uğradı (10s)')), ms));
+
                 const prodsPromise = supabase.from('products').select('*').order('Create_Time', { ascending: false }).then(res => res).catch(() => ({ data: [], error: null }));
 
-                const [catsRes, itemsRes, prodsRes] = await Promise.all([
-                    supabase.from('categories').select('*').order('order_index'),
-                    supabase.from('items').select('*').order('sort_priority'),
-                    prodsPromise
+                const [catsRes, itemsRes, prodsRes] = await Promise.race([
+                    Promise.all([
+                        supabase.from('categories').select('*').order('order_index'),
+                        supabase.from('items').select('*').order('sort_priority'),
+                        prodsPromise
+                    ]),
+                    timeout(10000)
                 ]);
 
                 if (catsRes.error) throw catsRes.error;
@@ -1142,7 +1147,8 @@ const usePromptManager = () => {
                 });
             } catch (err) {
                 console.error("Supabase load failed:", err);
-                dispatch({ type: A.SET_ERROR, message: 'Supabase bağlantı hatası!', context: err.message });
+                const isTimeout = err.message?.includes('zaman aşımı');
+                dispatch({ type: A.SET_ERROR, message: isTimeout ? 'Supabase bağlantısı zaman aşımına uğradı. Ağ bağlantınızı kontrol edin.' : 'Supabase bağlantı hatası: ' + err.message });
             }
         };
         fetchApiData();
