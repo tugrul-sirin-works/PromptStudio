@@ -64,6 +64,78 @@ const CONFLICT_RULES = [
     "Ensure depth of field logically matches the chosen aperture."
 ];
 
+// =============================================================================
+// DEMO / MOCK DATA — Supabase bağlı değilken kullanılır
+// =============================================================================
+
+const DEMO_CATEGORIES = [
+    { category_id: 'subject',          group_name_tr: 'TEMEL',        group_name_en: 'CORE',       title_tr: 'Konu & Özne',        title_en: 'Subject',           icon_name: 'Focus',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 1,  target_output: 'Visual' },
+    { category_id: 'lighting',         group_name_tr: 'TEMEL',        group_name_en: 'CORE',       title_tr: 'Işık & Atmosfer',    title_en: 'Lighting',          icon_name: 'Sun',           show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 2,  target_output: 'Visual' },
+    { category_id: 'camera_style',     group_name_tr: 'SİNEMATİK',   group_name_en: 'CINEMATIC',  title_tr: 'Kamera & Çekim',     title_en: 'Camera Style',      icon_name: 'Camera',        show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 3,  target_output: 'Visual' },
+    { category_id: 'composition',      group_name_tr: 'SİNEMATİK',   group_name_en: 'CINEMATIC',  title_tr: 'Kompozisyon',        title_en: 'Composition',       icon_name: 'LayoutTemplate', show_for: 'image,video,img2vid', is_meta: false, is_active: true, order_index: 4,  target_output: 'Visual' },
+    { category_id: 'mood',             group_name_tr: 'DUYGU',        group_name_en: 'EMOTION',    title_tr: 'Duygu & Hava',       title_en: 'Mood',              icon_name: 'Heart',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 5,  target_output: 'Visual' },
+    { category_id: 'color_palette',    group_name_tr: 'DUYGU',        group_name_en: 'EMOTION',    title_tr: 'Renk Paleti',        title_en: 'Color Palette',     icon_name: 'Palette',       show_for: 'image,video',         is_meta: false, is_active: true,  order_index: 6,  target_output: 'Visual' },
+    { category_id: 'art_style',        group_name_tr: 'STIL',         group_name_en: 'STYLE',      title_tr: 'Sanat & Render',     title_en: 'Art Style',         icon_name: 'Paintbrush',    show_for: 'image',               is_meta: false, is_active: true,  order_index: 7,  target_output: 'Visual' },
+    { category_id: 'negative_prompt',  group_name_tr: 'KONTROL',      group_name_en: 'CONTROL',    title_tr: 'Negatif Prompt',     title_en: 'Negative Prompt',   icon_name: 'ShieldAlert',   show_for: 'image,video,img2vid', is_meta: true,  is_active: true,  order_index: 8,  target_output: 'Visual' },
+    { category_id: 'copy_tone',        group_name_tr: 'PAZARLAMA',    group_name_en: 'MARKETING',  title_tr: 'Kopya Tonu',         title_en: 'Copy Tone',         icon_name: 'Megaphone',     show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 9,  target_output: 'Text' },
+    { category_id: 'target_audience',  group_name_tr: 'PAZARLAMA',    group_name_en: 'MARKETING',  title_tr: 'Hedef Kitle',        title_en: 'Target Audience',   icon_name: 'Users',         show_for: 'image,video,img2vid', is_meta: false, is_active: true,  order_index: 10, target_output: 'Text' },
+];
+
+const DEMO_ITEMS = [
+    // subject
+    { item_id: 'sub_product',    category_id: 'subject',         label_tr: 'Ürün Odaklı',        label_en: 'Product Focus',        trigger_text: 'hero product shot, commercial photography, studio isolated',            meaning_tr: 'Ürünü ön plana alan stüdyo çekimi',           is_default: true,  sort_priority: 1 },
+    { item_id: 'sub_portrait',   category_id: 'subject',         label_tr: 'Portre',              label_en: 'Portrait',             trigger_text: 'close-up portrait, detailed face, bokeh background',                    meaning_tr: 'Yüz ve ifadeye odaklanan portre',             is_default: false, sort_priority: 2 },
+    { item_id: 'sub_landscape',  category_id: 'subject',         label_tr: 'Manzara',             label_en: 'Landscape',            trigger_text: 'wide-angle landscape, epic scenery, vast environment',                  meaning_tr: 'Geniş alan, doğa veya şehir manzarası',      is_default: false, sort_priority: 3 },
+    { item_id: 'sub_abstract',   category_id: 'subject',         label_tr: 'Soyut',               label_en: 'Abstract',             trigger_text: 'abstract composition, geometric forms, surreal shapes',                 meaning_tr: 'Figüratif olmayan soyut görsel',              is_default: false, sort_priority: 4 },
+    // lighting
+    { item_id: 'lit_golden',     category_id: 'lighting',        label_tr: 'Altın Saat',          label_en: 'Golden Hour',          trigger_text: 'golden hour lighting, warm sunlight, long shadows, cinematic glow',    meaning_tr: 'Gün batımı öncesi sıcak ışık',               is_default: true,  sort_priority: 1 },
+    { item_id: 'lit_studio',     category_id: 'lighting',        label_tr: 'Stüdyo',              label_en: 'Studio',               trigger_text: 'professional studio lighting, softbox, controlled light, white backdrop', meaning_tr: 'Kontrollü stüdyo aydınlatması',               is_default: false, sort_priority: 2 },
+    { item_id: 'lit_neon',       category_id: 'lighting',        label_tr: 'Neon / Cyberpunk',    label_en: 'Neon',                 trigger_text: 'neon lights, cyberpunk glow, vibrant color light, night scene',         meaning_tr: 'Renkli neon ışıklar, gece atmosferi',        is_default: false, sort_priority: 3 },
+    { item_id: 'lit_natural',    category_id: 'lighting',        label_tr: 'Doğal Işık',          label_en: 'Natural Light',        trigger_text: 'natural diffused light, overcast sky, soft shadows',                   meaning_tr: 'Bulutlu veya pencere ışığı, yumuşak gölge', is_default: false, sort_priority: 4 },
+    { item_id: 'lit_dramatic',   category_id: 'lighting',        label_tr: 'Dramatik',            label_en: 'Dramatic',             trigger_text: 'dramatic chiaroscuro lighting, deep shadows, high contrast',             meaning_tr: 'Sert ışık ve gölge kontrastı',               is_default: false, sort_priority: 5 },
+    // camera_style
+    { item_id: 'cam_cinematic',  category_id: 'camera_style',    label_tr: 'Sinematik',           label_en: 'Cinematic',            trigger_text: 'anamorphic lens flare, 2.39:1 aspect ratio, 35mm film grain, cinematic depth of field', meaning_tr: 'Film gibi geniş ekran sinematik görünüm', is_default: true, sort_priority: 1 },
+    { item_id: 'cam_aerial',     category_id: 'camera_style',    label_tr: 'Havadan',             label_en: 'Aerial / Drone',       trigger_text: 'aerial drone shot, bird-eye view, top-down perspective',               meaning_tr: 'Drone ile yukarıdan çekim',                   is_default: false, sort_priority: 2 },
+    { item_id: 'cam_macro',      category_id: 'camera_style',    label_tr: 'Makro',               label_en: 'Macro',                trigger_text: 'extreme macro photography, 1:1 magnification, micro detail',             meaning_tr: 'Aşırı yakın çekim, ince detaylar',           is_default: false, sort_priority: 3 },
+    { item_id: 'cam_pov',        category_id: 'camera_style',    label_tr: 'POV / Birinci Şahıs', label_en: 'POV',                  trigger_text: 'first-person point of view, immersive perspective, GoPro style',        meaning_tr: 'Kameranın gözünden birinci şahıs görüş',     is_default: false, sort_priority: 4 },
+    // composition
+    { item_id: 'comp_rule3',     category_id: 'composition',     label_tr: 'Üçler Kuralı',        label_en: 'Rule of Thirds',       trigger_text: 'rule of thirds composition, balanced framing',                          meaning_tr: 'Klasik denge ve harmoni',                     is_default: true,  sort_priority: 1 },
+    { item_id: 'comp_symmetry',  category_id: 'composition',     label_tr: 'Simetri',             label_en: 'Symmetry',             trigger_text: 'perfect symmetry, mirror reflection, centered composition',              meaning_tr: 'Tam simetrik merkez kompozisyonu',            is_default: false, sort_priority: 2 },
+    { item_id: 'comp_leading',   category_id: 'composition',     label_tr: 'Yönlendirici Çizgi',  label_en: 'Leading Lines',        trigger_text: 'leading lines, dynamic perspective, depth through lines',               meaning_tr: 'Göz yönlendiren çizgi kompozisyonu',         is_default: false, sort_priority: 3 },
+    // mood
+    { item_id: 'mood_epic',      category_id: 'mood',            label_tr: 'Destansı',            label_en: 'Epic',                 trigger_text: 'epic, grandiose scale, awe-inspiring, monumental atmosphere',            meaning_tr: 'Büyük, destansı ve etkileyici',              is_default: true,  sort_priority: 1 },
+    { item_id: 'mood_calm',      category_id: 'mood',            label_tr: 'Sakin & Huzurlu',     label_en: 'Calm',                 trigger_text: 'serene, peaceful, tranquil mood, minimal tension',                      meaning_tr: 'Huzurlu ve sakin atmosfer',                   is_default: false, sort_priority: 2 },
+    { item_id: 'mood_mystery',   category_id: 'mood',            label_tr: 'Gizemli',             label_en: 'Mysterious',           trigger_text: 'mysterious, eerie, foggy, enigmatic atmosphere',                        meaning_tr: 'Sis ve karanlık, gizemli hava',              is_default: false, sort_priority: 3 },
+    { item_id: 'mood_joyful',    category_id: 'mood',            label_tr: 'Neşeli & Canlı',      label_en: 'Joyful',               trigger_text: 'vibrant, cheerful, joyful, energetic, lively colors',                   meaning_tr: 'Canlı ve enerjik neşeli atmosfer',           is_default: false, sort_priority: 4 },
+    // color_palette
+    { item_id: 'col_warm',       category_id: 'color_palette',   label_tr: 'Sıcak Tonlar',        label_en: 'Warm Tones',           trigger_text: 'warm color palette, orange, amber, terracotta, earthy tones',            meaning_tr: 'Turuncu, kehribar ve toprak tonları',        is_default: true,  sort_priority: 1 },
+    { item_id: 'col_cool',       category_id: 'color_palette',   label_tr: 'Soğuk Mavi',          label_en: 'Cool Blue',            trigger_text: 'cool color palette, blue, cyan, steel, ice tones',                      meaning_tr: 'Mavi, cyan ve soğuk çelik tonlar',           is_default: false, sort_priority: 2 },
+    { item_id: 'col_mono',       category_id: 'color_palette',   label_tr: 'Siyah & Beyaz',       label_en: 'Monochrome',           trigger_text: 'black and white, monochromatic, desaturated, high contrast B&W',        meaning_tr: 'Siyah beyaz veya tek ton renk paleti',       is_default: false, sort_priority: 3 },
+    { item_id: 'col_pastel',     category_id: 'color_palette',   label_tr: 'Pastel',              label_en: 'Pastel',               trigger_text: 'soft pastel colors, muted tones, dreamy palette',                       meaning_tr: 'Yumuşak, soluk ve hayalsi renkler',          is_default: false, sort_priority: 4 },
+    // art_style
+    { item_id: 'art_photo',      category_id: 'art_style',       label_tr: 'Fotogerçekçi',        label_en: 'Photorealistic',       trigger_text: 'photorealistic, hyperrealistic, 8K, RAW photo, professional DSLR',     meaning_tr: 'Gerçek fotoğraf kalitesinde render',         is_default: true,  sort_priority: 1 },
+    { item_id: 'art_cinegraph',  category_id: 'art_style',       label_tr: 'Sinematik CGI',       label_en: 'Cinematic CGI',        trigger_text: 'cinematic CGI, Unreal Engine render, octane render, volumetric lighting', meaning_tr: 'Film düzeyinde bilgisayar grafiği',          is_default: false, sort_priority: 2 },
+    { item_id: 'art_anime',      category_id: 'art_style',       label_tr: 'Anime / İllüstrasyon', label_en: 'Anime',               trigger_text: 'anime style, Studio Ghibli inspired, cel-shaded illustration',           meaning_tr: 'Japon anime çizgi film tarzı',               is_default: false, sort_priority: 3 },
+    { item_id: 'art_watercolor', category_id: 'art_style',       label_tr: 'Suluboya',            label_en: 'Watercolor',           trigger_text: 'watercolor painting, loose brushstrokes, paper texture',                 meaning_tr: 'Suluboya tarzı boyama',                      is_default: false, sort_priority: 4 },
+    // negative_prompt
+    { item_id: 'neg_blur',       category_id: 'negative_prompt', label_tr: 'Bulanık / Bozuk',     label_en: 'Blur / Distorted',     trigger_text: 'blurry, out of focus, distorted, deformed, ugly, low quality',          meaning_tr: 'Kalitesiz ve bozuk görüntü unsurları',       is_default: true,  sort_priority: 1 },
+    { item_id: 'neg_watermark',  category_id: 'negative_prompt', label_tr: 'Filigran / Metin',    label_en: 'Watermark',            trigger_text: 'watermark, text overlay, logo, signature, copyright',                   meaning_tr: 'Filigran ve metin içeren unsurlar',          is_default: true,  sort_priority: 2 },
+    { item_id: 'neg_anatomy',    category_id: 'negative_prompt', label_tr: 'Bozuk Anatomi',       label_en: 'Bad Anatomy',          trigger_text: 'bad anatomy, extra limbs, mutated hands, malformed fingers',             meaning_tr: 'Bozuk insan anatomisi unsurları',            is_default: false, sort_priority: 3 },
+    // copy_tone (marketing)
+    { item_id: 'copy_bold',      category_id: 'copy_tone',       label_tr: 'Cesur & Güçlü',       label_en: 'Bold & Strong',        trigger_text: 'bold, impactful, authoritative, confident brand voice',                  meaning_tr: 'Cesur ve güçlü marka sesi',                  is_default: true,  sort_priority: 1 },
+    { item_id: 'copy_friendly',  category_id: 'copy_tone',       label_tr: 'Samimi & Sıcak',      label_en: 'Friendly & Warm',      trigger_text: 'friendly, approachable, warm, conversational tone',                     meaning_tr: 'Samimi ve sıcak konuşma tonu',               is_default: false, sort_priority: 2 },
+    { item_id: 'copy_luxury',    category_id: 'copy_tone',       label_tr: 'Lüks & Prestijli',    label_en: 'Luxury',               trigger_text: 'luxurious, premium, sophisticated, exclusive brand voice',               meaning_tr: 'Prestijli lüks marka sesi',                  is_default: false, sort_priority: 3 },
+    // target_audience (marketing)
+    { item_id: 'aud_gen_z',      category_id: 'target_audience', label_tr: 'Gen Z (18-26)',        label_en: 'Gen Z',                trigger_text: 'targeting Gen Z, digital natives, trend-conscious, social-first',        meaning_tr: '18-26 yaş, dijital nesil',                   is_default: true,  sort_priority: 1 },
+    { item_id: 'aud_millennial', category_id: 'target_audience', label_tr: 'Millennial (27-42)',   label_en: 'Millennials',          trigger_text: 'targeting Millennials, value-conscious, experience-driven consumers',   meaning_tr: '27-42 yaş deneyim odaklı tüketiciler',      is_default: false, sort_priority: 2 },
+    { item_id: 'aud_premium',    category_id: 'target_audience', label_tr: 'Premium Segment',      label_en: 'Premium',              trigger_text: 'targeting premium consumers, high income, quality-focused, discerning',  meaning_tr: 'Yüksek gelirli, kalite odaklı segment',     is_default: false, sort_priority: 3 },
+];
+
+const DEMO_PRODUCTS = [
+    { Product_Id: 'demo_p1', Product_Name_TR: 'Örnek Ürün A', Scene_Desc_TR: 'Modern ve şık tasarımıyla öne çıkan premium ürün', Product_URL: '', Image_URL: '' },
+    { Product_Id: 'demo_p2', Product_Name_TR: 'Örnek Ürün B', Scene_Desc_TR: 'Doğal malzemelerle üretilmiş, sürdürülebilir koleksiyon parçası', Product_URL: '', Image_URL: '' },
+];
+
 const GEMINI_MODEL = "gemini-2.5-flash-preview-09-2025";
 const makeGeminiEndpoint = (key) =>
     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
@@ -539,8 +611,15 @@ const Modal = ({ open, onClose, title, subtitle, icon: Icon, maxW = 'max-w-2xl',
 const SectionWrapper = ({ title, colorTheme, isDark, outerClassName = '', containerClassName = '', customBg = '', innerRef, children }) => {
     return (
         <div ref={innerRef} className={`relative flex-shrink-0 ${outerClassName}`}>
-            <span className="section-label absolute -top-3.5 left-5 z-20 noise-overlay">{String(title)}</span>
-            <div className={`surface-card noise-overlay rounded-3xl ${containerClassName} ${customBg}`}>{children}</div>
+            <div className={`surface-card noise-overlay rounded-3xl overflow-hidden ${customBg}`}>
+                {title && (
+                    <div className={`section-strip border-b ${isDark ? 'border-white/[0.055]' : 'border-black/[0.055]'}`}>
+                        <span className="section-strip-dot" />
+                        <span className="section-strip-title">{String(title)}</span>
+                    </div>
+                )}
+                <div className={containerClassName}>{children}</div>
+            </div>
         </div>
     );
 };
@@ -969,9 +1048,34 @@ const usePromptManager = () => {
 
     useEffect(() => {
         const fetchApiData = async () => {
-            // Supabase yapılandırılmamışsa boş veriyle devam et
+            // Supabase yapılandırılmamışsa demo veriyle devam et
             if (!supabase) {
-                dispatch({ type: A.INITIALIZE, payload: { selections: {image:{},video:{},img2vid:{}}, activeCards: {image:{},video:{},img2vid:{}}, categoryOrder: [], activeCategoryTab: '', products: [], tableHeaders: { categories: [], items: [], products: [], marketing: [] }, marketingHeaders: [], marketingData: [], product: '', description: '' } });
+                const demoCats = transformApiData(DEMO_CATEGORIES, DEMO_ITEMS);
+                const demoSelections = {}; const demoActiveCards = {};
+                ['image', 'video', 'img2vid'].forEach(f => {
+                    demoSelections[f] = {}; demoActiveCards[f] = {};
+                    demoCats.forEach(cat => {
+                        if (cat.id === 'negative_prompt') {
+                            const defaultItems = cat.items.filter(i => i.isDefault).map(i => i.id);
+                            demoSelections[f][cat.id] = defaultItems.length > 0 ? defaultItems : null;
+                        } else {
+                            const defaultItem = cat.items.find(i => i.isDefault) || cat.items[0];
+                            demoSelections[f][cat.id] = defaultItem ? defaultItem.id : 'manual';
+                        }
+                        demoActiveCards[f][cat.id] = cat.defaultEnabled;
+                    });
+                });
+                setCategories(demoCats);
+                dispatch({ type: A.INITIALIZE, payload: {
+                    selections: demoSelections, activeCards: demoActiveCards,
+                    categoryOrder: demoCats.map(c => c.id),
+                    activeCategoryTab: demoCats[0]?.id || '',
+                    products: DEMO_PRODUCTS,
+                    tableHeaders: { categories: Object.keys(DEMO_CATEGORIES[0]), items: Object.keys(DEMO_ITEMS[0]), products: Object.keys(DEMO_PRODUCTS[0]), marketing: [] },
+                    marketingHeaders: [], marketingData: [],
+                    product: DEMO_PRODUCTS[0]?.Product_Name_TR || '',
+                    description: DEMO_PRODUCTS[0]?.Scene_Desc_TR || ''
+                }});
                 return;
             }
             try {
@@ -1619,14 +1723,9 @@ const App = () => {
             <header className={`border-b backdrop-blur-2xl px-5 py-2.5 sticky top-0 z-50 flex-shrink-0 transition-all ${state.isDark ? 'bg-[#02020a]/70 border-white/6' : 'bg-white/72 border-black/6'}`}>
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                     {/* Logo */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-[10px] bg-gradient-to-br from-violet-500 via-purple-600 to-cyan-500 flex items-center justify-center shadow-[0_0_14px_rgba(124,106,247,0.45)] flex-shrink-0">
-                            <Sparkles size={15} className="text-white" />
-                        </div>
-                        <div className="hidden sm:flex flex-col">
-                            <span className="text-[12px] font-black tracking-[0.22em] uppercase gradient-heading leading-none">PROMPT STUDIO</span>
-                            <span className={`text-[8px] font-semibold tracking-widest ${state.isDark ? 'text-white/25' : 'text-slate-400'}`}>AI VISUAL ENGINE</span>
-                        </div>
+                    <div className="flex items-center gap-2.5">
+                        <Sparkles size={18} className="text-violet-400 flex-shrink-0 drop-shadow-[0_0_6px_rgba(167,139,250,0.7)]" />
+                        <span className="hidden sm:inline logo-text text-[12px]">PROMPT STUDIO</span>
                     </div>
 
                     {/* Actions */}
@@ -1798,53 +1897,55 @@ const App = () => {
                     </div>
                 </SectionWrapper>
 
-                {/* MODE + FORMAT SEÇİCİ */}
-                <div className="w-full flex flex-col items-center gap-2.5 animate-in fade-in slide-in-from-bottom-2 relative z-30">
-                    <div className={`flex p-1.5 rounded-2xl w-full max-w-2xl border transition-all ${state.isDark ? 'bg-white/4 border-white/7' : 'bg-white/80 border-black/7'} backdrop-blur-md shadow-sm`}>
-                        {[
-                            { mode: 'visual', icon: Camera, labelFull: 'GÖRSEL ÜRETİMİ', labelShort: 'GÖRSEL', color: 'from-violet-600 to-violet-500', shadow: 'shadow-violet-500/30' },
-                            { mode: 'marketing', icon: Target, labelFull: 'PAZARLAMA STRATEJİSİ', labelShort: 'STRATEJİ', color: 'from-emerald-600 to-cyan-500', shadow: 'shadow-emerald-500/30' }
-                        ].map(({ mode, icon: Icon, labelFull, labelShort, color, shadow }) => (
-                            <button
-                                key={mode}
-                                onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: mode })}
-                                className={`flex-1 py-3 text-[10px] lg:text-[11px] font-black uppercase tracking-[0.18em] rounded-xl transition-all flex items-center justify-center gap-2.5 ${
-                                    state.appMode === mode
-                                        ? `bg-gradient-to-r ${color} text-white shadow-md ${shadow}`
-                                        : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                                }`}
-                            >
-                                <Icon size={15} />
-                                <span className="hidden sm:inline">{labelFull}</span>
-                                <span className="sm:hidden">{labelShort}</span>
-                            </button>
-                        ))}
-                    </div>
-
-                    {state.appMode === 'visual' && (
-                        <div className="flex items-center gap-1.5 animate-in fade-in duration-200">
-                            <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 mr-1">Format</span>
-                            {DATA_CONFIG.FORMATS.map(f => (
+                <SectionWrapper
+                    title={state.appMode === 'visual' ? "GÖRSEL PARAMETRELERİ" : "PAZARLAMA PARAMETRELERİ"}
+                    colorTheme="emerald" isDark={state.isDark} containerClassName="flex flex-col">
+                    {/* Mode + Format bar — kart içi üst şerit */}
+                    <div className={`flex flex-wrap items-center gap-3 px-4 py-3 border-b ${state.isDark ? 'border-white/[0.055]' : 'border-black/[0.055]'}`}>
+                        <div className={`flex p-1 rounded-xl border transition-all ${state.isDark ? 'bg-white/4 border-white/7' : 'bg-black/3 border-black/7'}`}>
+                            {[
+                                { mode: 'visual', icon: Camera, labelFull: 'GÖRSEL ÜRETİMİ', labelShort: 'GÖRSEL', color: 'from-violet-600 to-violet-500', shadow: 'shadow-violet-500/30' },
+                                { mode: 'marketing', icon: Target, labelFull: 'PAZARLAMA', labelShort: 'STRATEJİ', color: 'from-emerald-600 to-cyan-500', shadow: 'shadow-emerald-500/30' }
+                            ].map(({ mode, icon: Icon, labelFull, labelShort, color, shadow }) => (
                                 <button
-                                    key={f.id}
-                                    onClick={() => dispatch({ type: A.SET_FORMAT, payload: f.id })}
-                                    className={`flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider transition-all border ${
-                                        state.activeFormat === f.id
-                                            ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-500/30'
-                                            : (state.isDark ? 'bg-white/4 border-white/8 text-slate-500 hover:text-slate-300 hover:border-white/15' : 'bg-white border-black/8 text-slate-500 hover:text-violet-600 hover:border-violet-300/60')
+                                    key={mode}
+                                    onClick={() => dispatch({ type: A.SET_STATE, key: 'appMode', value: mode })}
+                                    className={`px-4 py-1.5 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.15em] rounded-lg transition-all flex items-center gap-2 ${
+                                        state.appMode === mode
+                                            ? `bg-gradient-to-r ${color} text-white shadow-sm ${shadow}`
+                                            : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'
                                     }`}
                                 >
-                                    <DynamicIcon name={f.iconName} size={10} />
-                                    {f.label}
+                                    <Icon size={13} />
+                                    <span className="hidden sm:inline">{labelFull}</span>
+                                    <span className="sm:hidden">{labelShort}</span>
                                 </button>
                             ))}
                         </div>
-                    )}
-                </div>
 
-                <SectionWrapper
-                    title={state.appMode === 'visual' ? "GÖRSEL PARAMETRELERİ" : "PAZARLAMA PARAMETRELERİ"}
-                    colorTheme="emerald" isDark={state.isDark} containerClassName="flex flex-col lg:flex-row overflow-hidden lg:h-[700px] h-auto min-h-[800px] relative z-10">
+                        {state.appMode === 'visual' && (
+                            <div className="flex items-center gap-1.5">
+                                <span className={`text-[8px] font-black uppercase tracking-widest mr-0.5 ${state.isDark ? 'text-white/25' : 'text-slate-400'}`}>Format</span>
+                                {DATA_CONFIG.FORMATS.map(f => (
+                                    <button
+                                        key={f.id}
+                                        onClick={() => dispatch({ type: A.SET_FORMAT, payload: f.id })}
+                                        className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider transition-all border ${
+                                            state.activeFormat === f.id
+                                                ? 'bg-violet-600 text-white border-violet-600 shadow-sm shadow-violet-500/30'
+                                                : (state.isDark ? 'bg-white/4 border-white/8 text-slate-500 hover:text-slate-300 hover:border-white/15' : 'bg-white border-black/8 text-slate-500 hover:text-violet-600 hover:border-violet-300/60')
+                                        }`}
+                                    >
+                                        <DynamicIcon name={f.iconName} size={10} />
+                                        {f.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Content row — sidebar + items */}
+                    <div className="flex flex-col lg:flex-row overflow-hidden lg:h-[700px] h-auto min-h-[800px] relative z-10">
                     <CategorySidebar
                         isDark={state.isDark} isReorderMode={state.isReorderMode} onToggleReorder={() => dispatch({ type: A.SET_STATE, key: 'isReorderMode', value: !state.isReorderMode })}
                         isDataLoaded={state.isDataLoaded} categoryOrder={state.categoryOrder} availableCategories={availableCategories}
@@ -1970,6 +2071,7 @@ const App = () => {
                             )}
                         </div>
                     </div>
+                    </div>{/* /content row */}
                 </SectionWrapper>
 
                 <SectionWrapper title="SIRALAMA VE ANALİZ" colorTheme="amber" isDark={state.isDark} containerClassName="relative flex flex-col p-5 px-6 rounded-2xl gap-4">
